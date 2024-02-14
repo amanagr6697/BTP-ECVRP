@@ -80,12 +80,6 @@ void TSP::fillMatrix(){
 	}
 }
 
-
-/******************************************************************************
-  This function uses Prim's algorithm to determine a minimum spanning tree on
-    the graph
-******************************************************************************/
-
 void TSP::findMST() {
 
   int *key = new int[n];
@@ -148,11 +142,6 @@ void TSP::findMST() {
 
 }
 
-
-/******************************************************************************
-  find the index of the closest unexamined node
-******************************************************************************/
-
 int TSP::getMinIndex(int key[], bool mst[]) {
 
   // initialize min and min_index
@@ -177,11 +166,6 @@ int TSP::getMinIndex(int key[], bool mst[]) {
 
 }
 
-
-/******************************************************************************
-  find all vertices of odd degree in the MST. Store them in an subgraph O
-******************************************************************************/
-
 void TSP::findOdds() {
 
   for (int i = 0; i < n; i++) {
@@ -200,9 +184,6 @@ void TSP::findOdds() {
 
 
 void TSP::perfectMatching() {
-  /************************************************************************************
-   find a perfect matching M in the subgraph O using greedy algorithm but not minimum
-  *************************************************************************************/
   int closest, length; //int d;
   std::vector<int>::iterator tmp, first;
 

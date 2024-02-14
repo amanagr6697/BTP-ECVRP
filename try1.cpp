@@ -4,7 +4,7 @@ using namespace std;
 
 double distance(double x1, double y1, double x2, double y2)
 {
-  return (double)sqrtl((x1-x2)*(x1-x2)*1.00 + (y1-y2)*(y1-y2)*1.00);
+    return (double)sqrtl((x1 - x2) * (x1 - x2) * 1.00 + (y1 - y2) * (y1 - y2) * 1.00);
 }
 
 signed main()
@@ -105,9 +105,8 @@ signed main()
     }
 
     // Battery charge specifying
-    double discharging_additive = discharging_const * parameter + temperature * sclaing_factor;
 
-    vector<int> adjacency_matrix[mx_vehicles+1][mx_customers];
+    vector<int> adjacency_matrix[mx_vehicles + 1][mx_customers];
 
     for (int i = 0; i < mx_battery_levels.size(); i++)
     {
@@ -134,34 +133,119 @@ signed main()
             }
             file.close();
 
-        double total_weight = filled_weights[i].first;
+            double total_weight = filled_weights[i].first;
 
             for (int j = 0; j < temp_nodes.size() - 1; j++)
             {
                 adjacency_matrix[i + 1][j].push_back(j + 1);
                 adjacency_matrix[i + 1][j + 1].push_back(j);
             }
-            adjacency_matrix[i+1][0].push_back(temp_nodes[temp_nodes.size()-1]);
-            adjacency_matrix[i+1][temp_nodes[temp_nodes.size()-1]].push_back(temp_nodes[0]);
-
-
+            adjacency_matrix[i + 1][0].push_back(temp_nodes[temp_nodes.size() - 1]);
+            adjacency_matrix[i + 1][temp_nodes[temp_nodes.size() - 1]].push_back(temp_nodes[0]);
         }
     }
-    
-    //The lesser distance that I cover in the initial phase where I am having lesser weight, it should be better.
-    for(int i=1;i<=mx_vehicles;i++)
+
+    vector<vector<vector<double>>> charge_requirement(mx_vehicles + 1, vector<vector<double>>(mx_battery_charging_stations));
+    double discharging_additive = discharging_const * parameter + temperature * sclaing_factor;
+    // The lesser distance that I cover in the initial phase where I am having lesser weight, it should be better.
+    vector<int> node_traversor[mx_vehicles + 1];
+
+    // abhi ke lie I'm assuming that I would not be requiring multiple charges for a trip from one node to another
+    for (int i = 1; i <= mx_vehicles; i++)
     {
-        double total_weight = filled_weights[i].first;
+        double weight = filled_weights[i].first;
 
         int depo = 0;
 
-        while()
+        int start_node = depo;
+
+        double battery_level = mx_battery_levels[i];
+        node_traversor[i].push_back(start_node);
+        double dist_1 = distance(locations[start_node].first, locations[start_node].second, locations[adjacency_matrix[i][start_node][0]].first, locations[adjacency_matrix[i][start_node][0]].second);
+        double dist_2 = distance(locations[start_node].first, locations[start_node].second, locations[adjacency_matrix[i][start_node][1]].first, locations[adjacency_matrix[i][start_node][1]].second);
+        int node_selected = -1;
+        if (dist_1 < dist_2)
         {
-            
-            int node = adjacency_matrix[]
+            node_selected = 0;
+        }
+        else
+        {
+            node_selected = 1;
+        }
+
+        double ch_required = discharging_additive + weight * 1.0 / mx_weight_allowed[i];
+        int node = -1;
+
+        while (node != depo)
+        {
+            weight -= demand_weights[adjacency_matrix[i][start_node][node_selected]];
+            battery_level -= ch_required;
+            node_traversor[i].push_back(start_node);
+            start_node = adjacency_matrix[i][start_node][node_selected];
+            node = start_node == adjacency_matrix[i][start_node][node_selected] ? adjacency_matrix[i][start_node][node_selected ^ 1] : adjacency_matrix[i][start_node][node_selected];
+            ch_required = discharging_additive + weight * 1.0 / mx_weight_allowed[i];
+
+            if (ch_required > battery_level)
+            {
+                // introduce charging station
+                double mn = 1e15;
+                int ch_node;
+                int ch_station = -1;
+                for (int j = 0; j < mx_battery_charging_stations; j++)
+                {
+                    double dist = distance(locations[start_node].first, locations[start_node].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                    if (mn > dist)
+                    {
+                        mn = dist;
+                        ch_station = j;
+                    }
+                }
+                node_traversor[i].push_back(ch_station * 1e9);
+                charge_requirement[i][ch_station].push_back(mx_battery_levels[i] - battery_level);
+                battery_level = mx_battery_levels[i];
+            }
         }
     }
 
+    vector<double> charging_times(mx_vehicles + 1);
 
-    return 0;
-}
+    vector<double> cost_of_charging(mx_vehicles + 1);
+
+    for (int i = 1; i <= mx_vehicles; i++)
+    {
+        for (auto stations : charge_requirement[i])
+        {
+            for (auto charge : stations)
+            {
+                cost_of_charging[i] += (charge * cost_per_unit_charge);
+                charging_times[i] += (charge * fast_ch_time_per_unit_of_charge);
+            }
+        }
+    }
+
+    for (int i = 1; i <= mx_vehicles; i++)
+    {
+        vector<int> num_charges_for_each_station;
+
+        for(auto station:charge_requirement[i])
+        {
+            num_charges_for_each_station.push_back(station.size());
+        }
+        sort(num_charges_for_each_station.begin(),num_charges_for_each_station.end(),greater<>());
+        
+        if (cost_of_charging[i] > mx_cost_allowed[i])
+        {
+            int extra = cost_of_charging[i] - mx_cost_allowed[i];
+
+            vector<int> dp(extra + 5, 0);
+
+            dp[0] = 1;
+
+            for(int j = 0 ; j<charge_requirement[i][num_charges_for_each_station[0]].size();j++)
+            {
+                
+            }
+        }
+
+        return 0;
+    }

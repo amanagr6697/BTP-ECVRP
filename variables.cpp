@@ -22,11 +22,11 @@ std::vector<double> mx_cost_allowed = {700, 200, 400, 200};
 
 std::vector<double> mx_weight_allowed = {80, 50, 70, 60};
 
-double fast_ch_time = 0.5;
+double fast_ch_time_per_unit_of_charge = 0.5;
 
-double medium_ch_time = 0.8;
+double medium_ch_time_per_unit_of_charge = 0.8;
 
-double slow_ch_time = 1.3;
+double slow_ch_time_per_unit_of_charge = 1.3;
 
 double battery_swapping_cost = 50;
 
@@ -53,3 +53,11 @@ double temperature = 300;
 double sclaing_factor = 0.03;
 
 double parameter = 0.5;
+
+int fast_time_chargers = 2;
+
+int medium_time_chargers = 2;
+
+int slow_time_chargers = 4;
+
+double cost_per_unit_charge = 10;
