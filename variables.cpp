@@ -16,11 +16,11 @@ std::pair<double, double> depot_location = {23, 27};
 
 std::vector<double> demand_weights = {20, 12, 28, 18, 15, 25, 13, 17, 30, 10};
 
-std::vector<double> mx_battery_levels = {5000, 1000, 4000, 2000};
+std::vector<double> mx_battery_levels = {0,5000, 1000, 4000, 2000};
 
-std::vector<double> mx_cost_allowed = {700, 200, 400, 200};
+std::vector<double> mx_cost_allowed = {0,700, 200, 400, 200};
 
-std::vector<double> mx_weight_allowed = {80, 50, 70, 60};
+std::vector<double> mx_weight_allowed = {0,80, 50, 70, 60};
 
 double fast_ch_time_per_unit_of_charge = 0.5;
 
@@ -64,10 +64,12 @@ double cost_per_unit_charge_of_fast = 10;
 double cost_per_unit_charge_of_medium = 8;
 double cost_per_unit_charge_of_slow = 5;
 
-std::vector<double> speed_of_vehicles = {10, 12, 9, 13, 17};
+std::vector<double> speed_of_vehicles = {0, 12, 9, 13, 17};
 
-std::vector<double> weight_factor_for_speed = {0.2, 0.13, 0.17, 0.09, 0.03};
+std::vector<double> weight_factor_for_speed = {0, 0.13, 0.17, 0.09, 0.03};
 
-std::vector<double> weight_factor_for_distance = {0.2, 0.13, 0.17, 0.09, 0.03};
+std::vector<double> weight_factor_for_distance = {0, 0.13, 0.17, 0.09, 0.03};
 
 double charge_per_unit_of_distance = 7;
+
+int mx_battery_charging_stations = 3;

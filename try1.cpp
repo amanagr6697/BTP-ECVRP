@@ -14,7 +14,7 @@ signed main()
     // Weight assigning
     vector<pair<double, int>> demand;
     int cnt = 1;
-    // cout << "aman";/
+    cout << "aman";
     for (auto &weight : demand_weights)
     {
         demand.push_back({weight, cnt});
@@ -23,11 +23,11 @@ signed main()
     cout << "cnt" << cnt << endl;
     sort(demand.begin(), demand.end(), greater<>());
     // cout << "aman";
-    // cout<<demand.size();
+    cout << demand.size();
     int counter = 1;
     priority_queue<pair<double, int>> allot_weights;
-    for (auto weight : mx_weight_allowed)
-        allot_weights.push({weight, counter}), counter++;
+    for (int i = 1; i < mx_weight_allowed.size(); i++)
+        allot_weights.push({mx_weight_allowed[i], counter}), counter++;
     // cout << "aman";
 
     vector<pair<double, vector<int>>> filled_weights(mx_vehicles + 1);
@@ -35,13 +35,15 @@ signed main()
     for (auto &i : filled_weights)
         i.first = 0;
 
+    cout << "size" << allot_weights.size();
     counter = 0;
     while (1)
     {
-        // cout << "counter" << counter << endl;
+        cout << "counter" << counter << endl;
         if (counter == mx_customers)
             break;
         auto top = allot_weights.top();
+        cout << top.first;
         // cout << "top.first" << top.first << endl;
         // cout << demand[counter].first << "\n";
         if (top.first < demand[counter].first)
@@ -63,7 +65,8 @@ signed main()
             filled_weights[top.second].second.push_back(demand[counter].second);
             cout << "Top second" << top.second << "Meow" << demand[counter].second << endl;
             counter++;
-            // cout << "Left weight: " << left_weight << endl;
+            cout << "Left weight: " << left_weight << endl;
+            cout << "counter" << counter;
         }
         // cout << allot_weights.size();
     }
@@ -108,9 +111,9 @@ signed main()
 
     vector<int> adjacency_matrix[mx_vehicles + 1][mx_customers];
 
-    for (int i = 0; i < mx_battery_levels.size(); i++)
+    for (int i = 1; i < mx_battery_levels.size(); i++)
     {
-        string fileName = "vehicle_" + to_string(i + 1) + ".txt";
+        string fileName = "vehicle_" + to_string(i) + ".txt";
 
         ifstream file(fileName);
         if (!file.is_open())
@@ -137,21 +140,21 @@ signed main()
 
             for (int j = 0; j < temp_nodes.size() - 1; j++)
             {
-                adjacency_matrix[i + 1][j].push_back(j + 1);
-                adjacency_matrix[i + 1][j + 1].push_back(j);
+                adjacency_matrix[i][j].push_back(j + 1);
+                adjacency_matrix[i][j + 1].push_back(j);
             }
-            adjacency_matrix[i + 1][0].push_back(temp_nodes[temp_nodes.size() - 1]);
-            adjacency_matrix[i + 1][temp_nodes[temp_nodes.size() - 1]].push_back(temp_nodes[0]);
+            adjacency_matrix[i][0].push_back(temp_nodes[temp_nodes.size() - 1]);
+            adjacency_matrix[i][temp_nodes[temp_nodes.size() - 1]].push_back(temp_nodes[0]);
         }
     }
 
+cout<<"aman";
     vector<vector<vector<int>>> charge_requirement(mx_vehicles + 1, vector<vector<int>>(mx_battery_charging_stations));
     double discharging_additive = discharging_const * parameter + temperature * sclaing_factor;
     // The lesser distance that I cover in the initial phase where I am having lesser weight, it should be better.
     vector<int> node_traversor[mx_vehicles + 1];
     vector<double> total_times(mx_vehicles + 1);
 
-    // abhi ke lie I'm assuming that I would not be requiring multiple charges for a trip from one node to another
     for (int i = 1; i <= mx_vehicles; i++)
     {
         double weight = filled_weights[i].first;
@@ -189,7 +192,7 @@ signed main()
             node_traversor[i].push_back(start_node);
             start_node = adjacency_matrix[i][start_node][node_selected];
             node = start_node == adjacency_matrix[i][start_node][node_selected] ? adjacency_matrix[i][start_node][node_selected ^ 1] : adjacency_matrix[i][start_node][node_selected];
-            ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i])*(distance_value*(weight_factor_for_distance*weight));
+            ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_value * (weight_factor_for_distance[i] * weight));
 
             int counter = 0;
             while (ch_required > battery_level)
@@ -224,6 +227,7 @@ signed main()
             }
         }
     }
+    cout<<"aman";
 
     for (auto &i : charge_requirement)
     {
@@ -322,20 +326,20 @@ signed main()
                 else
                 {
                     cout << "Solution not possible with these limits...Exiting";
-                    return;
+                    return 0;
                 }
             }
         }
-
-        for (int i = 1; i <= mx_vehicles; i++)
-        {
-            total_times[i]+=charging_times[i];
-        }
-        sort(total_times.begin(),total_times.end(),greater<>());
-
-        cout<<"Answer is: "<< total_times[0]<<endl;
-
-
-        // Not including battery saving for now
-        return 0;
     }
+
+    for (int i = 1; i <= mx_vehicles; i++)
+    {
+        total_times[i] += charging_times[i];
+    }
+    sort(total_times.begin(), total_times.end(), greater<>());
+
+    cout << "Answer is: " << total_times[0] << endl;
+
+    // Not including battery saving for now
+    return 0;
+}
