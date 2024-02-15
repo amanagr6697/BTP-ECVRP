@@ -60,4 +60,14 @@ int medium_time_chargers = 2;
 
 int slow_time_chargers = 4;
 
-double cost_per_unit_charge = 10;
+double cost_per_unit_charge_of_fast = 10;
+double cost_per_unit_charge_of_medium = 8;
+double cost_per_unit_charge_of_slow = 5;
+
+std::vector<double> speed_of_vehicles = {10, 12, 9, 13, 17};
+
+std::vector<double> weight_factor_for_speed = {0.2, 0.13, 0.17, 0.09, 0.03};
+
+std::vector<double> weight_factor_for_distance = {0.2, 0.13, 0.17, 0.09, 0.03};
+
+double charge_per_unit_of_distance = 7;

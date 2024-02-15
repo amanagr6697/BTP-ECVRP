@@ -145,10 +145,11 @@ signed main()
         }
     }
 
-    vector<vector<vector<double>>> charge_requirement(mx_vehicles + 1, vector<vector<double>>(mx_battery_charging_stations));
+    vector<vector<vector<int>>> charge_requirement(mx_vehicles + 1, vector<vector<int>>(mx_battery_charging_stations));
     double discharging_additive = discharging_const * parameter + temperature * sclaing_factor;
     // The lesser distance that I cover in the initial phase where I am having lesser weight, it should be better.
     vector<int> node_traversor[mx_vehicles + 1];
+    vector<double> total_times(mx_vehicles + 1);
 
     // abhi ke lie I'm assuming that I would not be requiring multiple charges for a trip from one node to another
     for (int i = 1; i <= mx_vehicles; i++)
@@ -164,28 +165,34 @@ signed main()
         double dist_1 = distance(locations[start_node].first, locations[start_node].second, locations[adjacency_matrix[i][start_node][0]].first, locations[adjacency_matrix[i][start_node][0]].second);
         double dist_2 = distance(locations[start_node].first, locations[start_node].second, locations[adjacency_matrix[i][start_node][1]].first, locations[adjacency_matrix[i][start_node][1]].second);
         int node_selected = -1;
+        double distance_value;
         if (dist_1 < dist_2)
         {
             node_selected = 0;
+            distance_value = dist_1;
         }
         else
         {
             node_selected = 1;
+            distance_value = dist_2;
         }
 
         double ch_required = discharging_additive + weight * 1.0 / mx_weight_allowed[i];
         int node = -1;
 
+        total_times[i] += ((node_selected == 0 ? dist_1 : dist_2) / (weight_factor_for_speed[i] * weight * speed_of_vehicles[i]));
         while (node != depo)
         {
+            total_times[i] += (distance_value / (weight_factor_for_speed[i] * weight * speed_of_vehicles[i]));
             weight -= demand_weights[adjacency_matrix[i][start_node][node_selected]];
             battery_level -= ch_required;
             node_traversor[i].push_back(start_node);
             start_node = adjacency_matrix[i][start_node][node_selected];
             node = start_node == adjacency_matrix[i][start_node][node_selected] ? adjacency_matrix[i][start_node][node_selected ^ 1] : adjacency_matrix[i][start_node][node_selected];
-            ch_required = discharging_additive + weight * 1.0 / mx_weight_allowed[i];
+            ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i])*(distance_value*(weight_factor_for_distance*weight));
 
-            if (ch_required > battery_level)
+            int counter = 0;
+            while (ch_required > battery_level)
             {
                 // introduce charging station
                 double mn = 1e15;
@@ -193,17 +200,36 @@ signed main()
                 int ch_station = -1;
                 for (int j = 0; j < mx_battery_charging_stations; j++)
                 {
-                    double dist = distance(locations[start_node].first, locations[start_node].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                    double dist;
+                    if (counter == 0)
+                        dist = distance(locations[start_node].first, locations[start_node].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                    else
+                        dist = distance(battery_ch_stations[(node_traversor[i].back() / (1e9))].first, battery_ch_stations[(node_traversor[i].back() / (1e9))].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+
                     if (mn > dist)
                     {
                         mn = dist;
                         ch_station = j;
                     }
                 }
+                if (counter == 0)
+                    distance_value = distance(locations[start_node].first, locations[start_node].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
+                else
+                    distance_value = distance(battery_ch_stations[(node_traversor[i].back() / (1e9))].first, battery_ch_stations[(node_traversor[i].back() / (1e9))].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
+
+                total_times[i] += (distance_value / (weight_factor_for_speed[i] * weight * speed_of_vehicles[i]));
                 node_traversor[i].push_back(ch_station * 1e9);
                 charge_requirement[i][ch_station].push_back(mx_battery_levels[i] - battery_level);
                 battery_level = mx_battery_levels[i];
             }
+        }
+    }
+
+    for (auto &i : charge_requirement)
+    {
+        for (auto &j : i)
+        {
+            sort(j.begin(), j.end(), greater<>());
         }
     }
 
@@ -217,35 +243,99 @@ signed main()
         {
             for (auto charge : stations)
             {
-                cost_of_charging[i] += (charge * cost_per_unit_charge);
+                cost_of_charging[i] += (charge * cost_per_unit_charge_of_fast);
                 charging_times[i] += (charge * fast_ch_time_per_unit_of_charge);
             }
         }
     }
 
+    // Balancing cost
+
     for (int i = 1; i <= mx_vehicles; i++)
     {
         vector<int> num_charges_for_each_station;
 
-        for(auto station:charge_requirement[i])
+        for (auto station : charge_requirement[i])
         {
             num_charges_for_each_station.push_back(station.size());
         }
-        sort(num_charges_for_each_station.begin(),num_charges_for_each_station.end(),greater<>());
-        
-        if (cost_of_charging[i] > mx_cost_allowed[i])
-        {
-            int extra = cost_of_charging[i] - mx_cost_allowed[i];
+        sort(num_charges_for_each_station.begin(), num_charges_for_each_station.end(), greater<>());
 
-            vector<int> dp(extra + 5, 0);
+        int counter = 0;
+
+        bool medium_or_slow = 0; // 0 denotes for fast to medium and 1 dentoes from medium to slow
+
+        while (counter < num_charges_for_each_station.size() && cost_of_charging[i] > mx_cost_allowed[i])
+        {
+            int extra = (cost_of_charging[i] - mx_cost_allowed[i]);
+
+            vector<bool> dp(2 * extra + 2, 0);
 
             dp[0] = 1;
 
-            for(int j = 0 ; j<charge_requirement[i][num_charges_for_each_station[0]].size();j++)
+            for (int j = 0; j < charge_requirement[i][num_charges_for_each_station[counter]].size(); j++)
             {
-                
+                int value = charge_requirement[i][num_charges_for_each_station[counter]][j] * (medium_or_slow == 0 ? cost_per_unit_charge_of_fast : cost_per_unit_charge_of_medium);
+                for (int k = 2 * extra; k >= value; k--)
+                {
+                    if (dp[k - value])
+                        dp[k] = 1;
+                }
+            }
+
+            vector<int> station_numbers;
+            bool flag = 0;
+            for (int j = extra; j <= 2 * extra; j++)
+            {
+                if (dp[j])
+                {
+                    flag = 1;
+                    for (int k = 0; k < charge_requirement[i][num_charges_for_each_station[counter]].size(); j++)
+                    {
+                        int value = charge_requirement[i][num_charges_for_each_station[counter]][k];
+                        if (j >= value and dp[j - value])
+                        {
+                            station_numbers.push_back(k);
+                            j -= value;
+                        }
+                        else if (j == 0)
+                            break;
+                    }
+                }
+                if (flag)
+                    break;
+            }
+
+            int total_cost_saved = 0;
+            for (auto j : station_numbers)
+            {
+                int total_charge = (charge_requirement[i][num_charges_for_each_station[counter]][j]);
+                total_cost_saved += (total_charge) * ((medium_or_slow == 0 ? cost_per_unit_charge_of_medium : cost_per_unit_charge_of_slow) - (medium_or_slow == 0 ? cost_per_unit_charge_of_fast : cost_per_unit_charge_of_medium));
+                charging_times[i] += (total_charge) * ((medium_or_slow == 0 ? medium_ch_time_per_unit_of_charge : slow_ch_time_per_unit_of_charge) - (medium_or_slow == 0 ? fast_ch_time_per_unit_of_charge : medium_ch_time_per_unit_of_charge));
+            }
+            cost_of_charging[i] -= total_cost_saved;
+            counter++;
+            if (counter == num_charges_for_each_station.size())
+            {
+                if (medium_or_slow == 0)
+                    medium_or_slow = 1;
+                else
+                {
+                    cout << "Solution not possible with these limits...Exiting";
+                    return;
+                }
             }
         }
 
+        for (int i = 1; i <= mx_vehicles; i++)
+        {
+            total_times[i]+=charging_times[i];
+        }
+        sort(total_times.begin(),total_times.end(),greater<>());
+
+        cout<<"Answer is: "<< total_times[0]<<endl;
+
+
+        // Not including battery saving for now
         return 0;
     }

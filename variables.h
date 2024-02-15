@@ -28,5 +28,11 @@ extern double parameter;
 extern int fast_time_chargers;
 extern int medium_time_chargers;
 extern int slow_time_chargers;
-extern double cost_per_unit_charge;
+extern double cost_per_unit_charge_of_fast;
+extern double cost_per_unit_charge_of_medium;
+extern double cost_per_unit_charge_of_slow;
+extern vector<double> speed_of_vehicles;
+extern vector<double> weight_factor_for_speed;
+extern vector<double> weight_factor_for_distance;
+extern double charge_per_unit_of_distance;
 #endif 
