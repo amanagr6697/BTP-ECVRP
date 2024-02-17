@@ -6,7 +6,6 @@
 
 extern std::vector<std::pair<double, double>> locations;
 extern std::vector<double> demand_weights;
-extern std::pair<double, double> depot_location;
 extern std::vector<std::pair<double,double>> battery_ch_stations;
 extern std::vector<std::pair<double,double>> battery_swap_stations;
 extern std::vector<double> mx_battery_levels;

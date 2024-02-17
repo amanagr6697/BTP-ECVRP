@@ -1,6 +1,7 @@
 #include "Variables.h"
 
 std::vector<std::pair<double, double>> locations = {
+    {23,27}, //depo location
     {20, 15},
     {10, 25},
     {5, 10},
@@ -12,9 +13,7 @@ std::vector<std::pair<double, double>> locations = {
     {27, 12},
     {18, 22}};
 
-std::pair<double, double> depot_location = {23, 27};
-
-std::vector<double> demand_weights = {20, 12, 28, 18, 15, 25, 13, 17, 30, 10};
+std::vector<double> demand_weights = {0,20, 12, 28, 18, 15, 25, 13, 17, 30, 10};
 
 std::vector<double> mx_battery_levels = {0,5000, 1000, 4000, 2000};
 
