@@ -332,94 +332,53 @@ signed main()
     // Balancing cost
     for (int i = 1; i <= mx_vehicles; i++)
     {
-        vector<pair<int,int>> num_charges_for_each_station;
-
+        priority_queue<pair<double, pair<int, int>>> charge_storage;
         for (int j = 1; j <= mx_battery_charging_stations; j++)
         {
-            if (charge_requirement[i][j].size() != 0)
+            for (int k = 0; k < charge_requirement[i][j].size(); k++)
             {
-                cout << "MAmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" << charge_requirement[i][j].size() << endl;
-                num_charges_for_each_station.push_back({charge_requirement[i][j].size(),j});
+                charge_storage.push({charge_requirement[i][j][k], {j, k}});
             }
         }
-        sort(num_charges_for_each_station.begin(), num_charges_for_each_station.end(), greater<>());
-
-        int counter = 0;
 
         bool medium_or_slow = 0; // 0 denotes for fast to medium and 1 dentoes from medium to slow
-        cout<<"cost of charrging"<<cost_of_charging[i]<<" mx cost allowed "<<mx_cost_allowed[i]<<endl;
-        
+        cout << "cost of charrging" << cost_of_charging[i] << " mx cost allowed " << mx_cost_allowed[i] << endl;
+
+        map<pair<int, int>, bool> mapping_for_station[mx_vehicles+1];
+        double total_cost_saved = 0;
+        // 0 means from fast to medium and 1 means from medium to slow if for same charging station
         while (cost_of_charging[i] > mx_cost_allowed[i])
         {
-            int extra = (cost_of_charging[i] - mx_cost_allowed[i]);
+            double extra = (cost_of_charging[i] - mx_cost_allowed[i]);
             cout << "extra" << extra << endl;
-            vector<bool> dp(40 * extra + 2, 0);
 
-            dp[0] = 1;
-            cout << "Yo" << charge_requirement[i][num_charges_for_each_station[counter].second].size() << endl;
-            for (int j = 0; j < charge_requirement[i][num_charges_for_each_station[counter].second].size(); j++)
+            if (charge_storage.size() == 0)
             {
-                int value = charge_requirement[i][num_charges_for_each_station[counter].second][j] * (medium_or_slow == 0 ? cost_per_unit_charge_of_fast : cost_per_unit_charge_of_medium);
-                cout << "value" << value << endl;
-                for (int k = 40 * extra; k >= value; k--)
-                {
-                    if (dp[k - value])
-                    {
-                        
-                        dp[k] = 1;
-                    }
-                }
+                cout << "Cost speicification not feasible...Exiting";
+                return 0;
             }
-
-            vector<int> station_numbers;
-            bool flag = 0;
-            for (int j = extra; j <= 40 * extra; j++)
-            {
-                if (dp[j])
-                {
-                    flag = 1;
-                    for (int k = 0; k < charge_requirement[i][num_charges_for_each_station[counter].second].size(); j++)
-                    {
-                        int value = charge_requirement[i][num_charges_for_each_station[counter].second][k] * (medium_or_slow == 0 ? cost_per_unit_charge_of_fast : cost_per_unit_charge_of_medium);
-                        if (j >= value and dp[j - value])
-                        {
-                            station_numbers.push_back(k);
-                            j -= value;
-                        }
-                        else if (j == 0)
-                            break;
-                    }
-                }
-                if (flag)
-                    break;
-            }
-
-            int total_cost_saved = 0;
-            for (auto j : station_numbers)
-            {
-                int total_charge = (charge_requirement[i][num_charges_for_each_station[counter].second][j]);
-                total_cost_saved += (total_charge) * ((medium_or_slow == 0 ? cost_per_unit_charge_of_medium : cost_per_unit_charge_of_slow) - (medium_or_slow == 0 ? cost_per_unit_charge_of_fast : cost_per_unit_charge_of_medium));
-                charging_times[i] += (total_charge) * ((medium_or_slow == 0 ? medium_ch_time_per_unit_of_charge : slow_ch_time_per_unit_of_charge) - (medium_or_slow == 0 ? fast_ch_time_per_unit_of_charge : medium_ch_time_per_unit_of_charge));
-            }
+            auto top = charge_storage.top();
+            medium_or_slow = mapping_for_station[i][top.second];
+            cout<<"mdium or losw"<<medium_or_slow<<endl;
+            double value = top.first * (medium_or_slow == 0 ? cost_per_unit_charge_of_medium : cost_per_unit_charge_of_slow);
+            double cost_saved = (top.first) * ((medium_or_slow == 0 ? cost_per_unit_charge_of_fast : cost_per_unit_charge_of_medium) - (medium_or_slow == 0 ? cost_per_unit_charge_of_medium : cost_per_unit_charge_of_slow));
+            cout<<"value "<<value<<" cost saved "<<cost_saved<<endl;
+            total_cost_saved += cost_saved;
+            charging_times[i] += (top.first) * ((medium_or_slow == 0 ? medium_ch_time_per_unit_of_charge : slow_ch_time_per_unit_of_charge) - (medium_or_slow == 0 ? fast_ch_time_per_unit_of_charge : medium_ch_time_per_unit_of_charge));
             cout << "total cost savaved" << total_cost_saved << endl;
             cost_of_charging[i] -= total_cost_saved;
-            counter++;
-            if (counter == num_charges_for_each_station.size())
-            {
-                if (medium_or_slow == 0)
-                    medium_or_slow = 1;
-                else
-                {
-                    cout << "Solution not possible with these limits...Exiting";
-                    return 0;
-                }
-            }
+            charge_storage.pop();
+            if (mapping_for_station[i][top.second] == 0)
+                charge_storage.push({top.first - cost_saved, top.second});
+            cost_of_charging[i] -= cost_saved;
+            mapping_for_station[i][top.second] = 1;
         }
     }
 
     for (int i = 1; i <= mx_vehicles; i++)
     {
         total_times[i] += charging_times[i];
+        cout<<"Total time "<<total_times[i]<<endl;
     }
     sort(total_times.begin(), total_times.end(), greater<>());
 
