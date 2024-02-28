@@ -10,7 +10,8 @@ double distance(double x1, double y1, double x2, double y2)
 
 signed main()
 {
-    // Vehicle Assignment part completed.
+    // Vehicle Assignment part.
+    /************* Vehicle Assignment Part *************/
     cout << mx_customers;
     // Weight assigning
     vector<pair<double, int>> demand;
@@ -46,7 +47,7 @@ signed main()
         cout << top.first;
         // cout << "top.first" << top.first << endl;
         // cout << demand[counter].first << "\n";
-        if (top.first < demand[counter].first)
+        if (top.first < demand[counter].first) //If maximum possible vehicle weight can't also fulfill the requirements.
         {
             cout << "Assignment not possible...Exiting \n";
             return 0;
@@ -114,6 +115,7 @@ signed main()
     }
 
     // Battery charge specifying
+    /************* Creating graph from the traversors  *************/
 
     vector<int> adjacency_matrix[mx_vehicles + 1][mx_customers + 1];
 
@@ -170,6 +172,13 @@ signed main()
             }
         }
     }
+    
+
+        /************* Graph Done *************/
+
+
+        /************* Satisfying each vehicle's charging constraint by visiting multiple depot's *************/
+
 
     cout << "amancompleted";
     vector<vector<vector<int>>> charge_requirement(mx_vehicles + 1, vector<vector<int>>(mx_battery_charging_stations + 1));
@@ -306,6 +315,9 @@ signed main()
         }
     }
 
+        /************* Charging completed, now ensuring that all the vehicles remain in their cost *************/
+
+
     vector<double> charging_times(mx_vehicles + 1);
 
     vector<double> cost_of_charging(mx_vehicles + 1);
@@ -375,6 +387,8 @@ signed main()
         }
     }
 
+        /************* Cost Optimisation Also Done ****************/
+
     for (int i = 1; i <= mx_vehicles; i++)
     {
         total_times[i] += charging_times[i];
@@ -384,6 +398,7 @@ signed main()
 
     cout << "Answer is: " << total_times[0] << endl;
 
-    // Not including battery saving for now
+    /************* Battery Swapping Not Done *************/
+    
     return 0;
 }
