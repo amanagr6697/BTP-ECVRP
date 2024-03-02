@@ -14,7 +14,7 @@ extern std::vector<double> mx_weight_allowed;
 extern int mx_vehicles;
 extern int mx_customers;
 extern int mx_battery_charging_stations;
-extern double mx_battery_swapping_stations;
+extern int mx_battery_swapping_stations;
 extern double fast_ch_time_per_unit_of_charge;
 extern double medium_ch_time_per_unit_of_charge;
 extern double slow_ch_time_per_unit_of_charge;

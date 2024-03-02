@@ -76,3 +76,5 @@ std::vector<double> weight_factor_for_distance = {0, 0.13, 0.17, 0.09, 0.03};
 double charge_per_unit_of_distance = 7;
 
 int mx_battery_charging_stations =11;
+
+int mx_battery_swapping_stations = 4;
