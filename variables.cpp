@@ -10,12 +10,12 @@ std::vector<std::pair<double, double>> locations = {
     {15, 30},
     {8, 18},
     {22, 28},
-    {21, 12},
+    {21, 20},
     {16, 13}};
 
 std::vector<double> demand_weights = {0,20, 12, 28, 18, 15, 25, 13, 17, 30, 10};
 
-std::vector<double> mx_battery_levels = {0,950, 540, 220, 340};
+std::vector<double> mx_battery_levels = {0,2200, 1910, 2020, 1340};
 
 std::vector<double> mx_cost_allowed = {0,4500, 2000, 400, 1200};
 
@@ -40,8 +40,8 @@ std::vector<std::pair<double, double>> battery_ch_stations = {
     {13, 12},
     {19, 12},
     {13, 8},
-    {15,19},
-    {8,19},{18,12},{14,18},{19,12},{8,9},{3,9},{2,11}};
+    {25,28},
+    {8,19},{18,12},{14,18},{19,12},{8,9},{3,9},{2,11},{24,29}};
 
 std::vector<std::pair<double, double>> battery_swap_stations = {
     {23,27},
@@ -75,6 +75,6 @@ std::vector<double> weight_factor_for_distance = {0, 0.13, 0.17, 0.09, 0.03};
 
 double charge_per_unit_of_distance = 7;
 
-int mx_battery_charging_stations =11;
+int mx_battery_charging_stations =12;
 
-int mx_battery_swapping_stations = 4;
+int mx_battery_swapping=4;

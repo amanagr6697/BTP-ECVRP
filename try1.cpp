@@ -180,6 +180,7 @@ signed main()
     cout << "amancompleted";
     vector<vector<vector<int>>> charge_requirement(mx_vehicles + 1, vector<vector<int>>(mx_battery_charging_stations + 1));
     double discharging_additive = discharging_const * parameter + temperature * sclaing_factor;
+    cout << "DISCHARGIng " << discharging_additive << endl;
     // The lesser distance that I cover in the initial phase where I am having lesser weight, it should be better.
     vector<int> node_traversor[mx_vehicles + 1];
     vector<double> total_times(mx_vehicles + 1);
@@ -190,15 +191,16 @@ signed main()
         cout << "Weight: " << weight << endl;
 
         int depo = 0;
+        node_traversor[i].push_back(depo);
 
-        int start_node = depo;
+        int end_node = depo;
 
         double battery_level = mx_battery_levels[i];
-        node_traversor[i].push_back(start_node);
-        cout << "ROCKS" << adjacency_matrix[i][start_node][0] << "bhak" << adjacency_matrix[i][start_node][1] << endl
+        // node_traversor[i].push_back(end_node);
+        cout << "ROCKS" << adjacency_matrix[i][end_node][0] << "bhak" << adjacency_matrix[i][end_node][1] << endl
              << endl;
-        double dist_1 = distance(locations[start_node].first, locations[start_node].second, locations[adjacency_matrix[i][start_node][0]].first, locations[adjacency_matrix[i][start_node][0]].second);
-        double dist_2 = distance(locations[start_node].first, locations[start_node].second, locations[adjacency_matrix[i][start_node][1]].first, locations[adjacency_matrix[i][start_node][1]].second);
+        double dist_1 = distance(locations[end_node].first, locations[end_node].second, locations[adjacency_matrix[i][end_node][0]].first, locations[adjacency_matrix[i][end_node][0]].second);
+        double dist_2 = distance(locations[end_node].first, locations[end_node].second, locations[adjacency_matrix[i][end_node][1]].first, locations[adjacency_matrix[i][end_node][1]].second);
         int node_selected = -1;
         double distance_value;
         cout << "DIST" << dist_1 << " " << dist_2 << endl;
@@ -218,68 +220,68 @@ signed main()
         double ch_required = 0;
         // int node = -1;
 
-        total_times[i] += ((node_selected == 0 ? dist_1 : dist_2) / ((1 + weight_factor_for_speed[i] * weight) * speed_of_vehicles[i]));
-        cout << "Total_times" << total_times[i] << endl;
-
-        cout << "Vehicle" << i << "start node" << start_node << endl
+        cout << "Vehicle" << i << "start node" << end_node << endl
              << endl;
         bool visited[mx_customers + 1] = {0};
         int counter = 0;
+        end_node = adjacency_matrix[i][end_node][node_selected];
+        double distance_between_nodes = distance(locations[depo].first, locations[depo].second, locations[end_node].first, locations[end_node].second);
+        int temp = depo;
+        ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_value * (1 + weight_factor_for_distance[i] * weight));
+        cout << "End node " << end_node << endl;
+        cout << "CH REQ " << ch_required << endl;
+        cout << "MAX battery " << battery_level << endl;
+        cout << "DISTANCE NODES " << distance_between_nodes << endl;
         int previous_node = depo;
+        // distance_value =
         while (1)
         {
-            counter++;
-            total_times[i] += (distance_value / ((1 + weight_factor_for_speed[i] * weight) * speed_of_vehicles[i]));
-            cout << "Weight" << weight << endl;
-            battery_level -= ch_required;
-            node_traversor[i].push_back(start_node);
-            cout
-                << "start node" << start_node << "node selected" << node_selected << endl
-                << endl;
-            int temp = start_node;
-
-            start_node = adjacency_matrix[i][start_node][node_selected];
-            cout << "start" << start_node << endl;
-            if (visited[start_node] != 0 or start_node == previous_node)
+            double residual_battery_level = battery_level - 150;
+            cout << "RESIDUAL battery level " << residual_battery_level << endl;
+            cout << "battery level " << battery_level << endl;
+            cout << "ch req " << ch_required << endl;
+            if(end_node==depo)
+            residual_battery_level=battery_level;
+            while (ch_required > residual_battery_level)
             {
-                node_selected ^= 1;
-                start_node = adjacency_matrix[i][temp][node_selected];
-            }
-            weight -= demand_weights[start_node];
-            double distance_between_nodes = distance(locations[temp].first, locations[temp].second, locations[start_node].first, locations[start_node].second);
-            visited[start_node] = 1;
-            // node = start_node == adjacency_matrix[i][start_node][node_selected] ? adjacency_matrix[i][start_node][node_selected ^ 1] : adjacency_matrix[i][start_node][node_selected];
-
-            cout
-                << "start node" << start_node << "node selected" << node_selected << "distance value" << distance_value << "discharging value" << discharging_additive << endl
-                << endl;
-            ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_value * (1 + weight_factor_for_distance[i] * weight));
-            cout << "Battery Level: " << battery_level << "charge req" << ch_required << endl;
-            int counter = 0;
-            // double distance_between_swapping_nodes = distance_between_nodes;
-            while (ch_required > battery_level)
-            {
+                if (residual_battery_level < 100)
+                    residual_battery_level += 150;
                 // introduce charging station
+                if(end_node==depo and residual_battery_level>ch_required)
+                break;
+
                 double mn = 1e15;
                 int ch_station = -1;
+                double to_ch_station_charge = -1;
+
                 for (int j = 1; j <= mx_battery_charging_stations; j++)
                 {
                     double dist;
                     if (counter == 0)
                         dist = distance(locations[temp].first, locations[temp].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
                     else
-                        dist = distance(battery_ch_stations[(node_traversor[i].back() / (1e9))].first, battery_ch_stations[(node_traversor[i].back() / (1e9))].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
-                    double distance_between_charging = distance(locations[start_node].first, locations[start_node].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                        dist = distance(battery_ch_stations[(node_traversor[i].back() / (1e5))].first, battery_ch_stations[(node_traversor[i].back() / (1e5))].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                    cout << "DIST   " << dist << endl;
+                    double distance_between_charging = distance(locations[end_node].first, locations[end_node].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                    cout << "Battery " << battery_ch_stations[j].first << " " << battery_ch_stations[j].second << endl;
+                    cout << "Temp " << temp << " " << locations[temp].first << " " << locations[temp].second << endl;
+                    cout<<"Node between charging distance "<<distance_between_charging<<endl;
+                    cout<<"Node between node distance "<<distance_between_nodes<<endl;
 
                     cout << "j is " << j << " dist is " << dist << "distance between charging" << distance_between_charging << "distance between nodes" << distance_between_nodes << endl;
-                    if (distance_between_charging < distance_between_nodes)
+                    double battery_ch_required_for_previous_to_next = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (dist * (1 + weight_factor_for_distance[i] * weight));
+                    cout << "BATTERY CHARGE " << battery_ch_required_for_previous_to_next << endl;
+                    cout << "WEIGHT " << weight << endl;
+                    if (distance_between_charging < distance_between_nodes && battery_ch_required_for_previous_to_next < residual_battery_level)
                     {
+                        cout<<"AMANNNNN"<<endl;
                         mn = min(mn, dist);
                         ch_station = j;
+                        to_ch_station_charge = battery_ch_required_for_previous_to_next;
                     }
                 }
                 // double distance_between_swapping;
-                // double mnSwap = 1e9;
+                // double mnSwap = 1e5;
                 // int swap_station = -1;
                 // for (int j = 1; j <= mx_battery_swapping_stations; j++)
                 // {
@@ -287,8 +289,8 @@ signed main()
                 //     if (counter == 0)
                 //         dist = distance(locations[temp].first, locations[temp].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
                 //     else
-                //         dist = distance(battery_swap_stations[(node_traversor[i].back() / (1e9))].first, battery_swap_stations[(node_traversor[i].back() / (1e9))].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
-                //     double distance_between_swapping = distance(locations[start_node].first, locations[start_node].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
+                //         dist = distance(battery_swap_stations[(node_traversor[i].back() / (1e5))].first, battery_swap_stations[(node_traversor[i].back() / (1e5))].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
+                //     double distance_between_swapping = distance(locations[end_node].first, locations[end_node].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
 
                 //     // cout << "j is " << j << " dist is " << dist << "distance between/ charging" << distance_between_charging << "distance between nodes" << distance_between_nodes << endl;
                 //     if (distance_between_swapping < distance_between_swapping_nodes)
@@ -308,36 +310,83 @@ signed main()
                 // double swapping_node_distance_value;
                 // if (ch_station != -1)
                 // {
-                    distance_between_nodes = distance(battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second, locations[start_node].first, locations[start_node].second);
-                    if (counter == 0)
-                        distance_value = distance(locations[temp].first, locations[temp].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
-                    else
-                        distance_value = distance(battery_ch_stations[(node_traversor[i].back() / (1e9))].first, battery_ch_stations[(node_traversor[i].back() / (1e9))].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
-                    cout << "ch station" << ch_station << endl;
+                distance_between_nodes = distance(battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second, locations[end_node].first, locations[end_node].second);
+                if (counter == 0)
+                    distance_value = distance(locations[temp].first, locations[temp].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
+                else
+                    distance_value = distance(battery_ch_stations[(node_traversor[i].back() / (1e5))].first, battery_ch_stations[(node_traversor[i].back() / (1e5))].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
+                cout << "ch station" << ch_station << endl;
                 // }
                 // if(swap_station!=-1)
                 // {
-                //     distance_between_swapping_nodes = distance(battery_swap_stations[ch_station].first, battery_swap_stations[ch_station].second, locations[start_node].first, locations[start_node].second);
+                //     distance_between_swapping_nodes = distance(battery_swap_stations[ch_station].first, battery_swap_stations[ch_station].second, locations[end_node].first, locations[end_node].second);
                 //     if (counter == 0)
                 //         swapping_node_distance_value = distance(locations[temp].first, locations[temp].second, battery_swap_stations[ch_station].first, battery_swap_stations[ch_station].second);
                 //     else
-                //         swapping_node_distance_value = distance(battery_swap_stations[(node_traversor[i].back() / (1e9))].first, battery_swap_stations[(node_traversor[i].back() / (1e9))].second, battery_swap_stations[ch_station].first, battery_swap_stations[ch_station].second);
+                //         swapping_node_distance_value = distance(battery_swap_stations[(node_traversor[i].back() / (1e5))].first, battery_swap_stations[(node_traversor[i].back() / (1e5))].second, battery_swap_stations[ch_station].first, battery_swap_stations[ch_station].second);
                 // }
 
+                charge_requirement[i][ch_station].push_back(mx_battery_levels[i] - to_ch_station_charge);
                 total_times[i] += (distance_value / ((1 + weight_factor_for_speed[i] * weight) * speed_of_vehicles[i]));
-                node_traversor[i].push_back(ch_station * 1e9);
-                ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_value * (1 + weight_factor_for_distance[i] * weight));
+                node_traversor[i].push_back(ch_station * 1e5);
+                ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_between_nodes * (1 + weight_factor_for_distance[i] * weight));
                 cout << "charge required" << ch_required << endl;
-                charge_requirement[i][ch_station].push_back(mx_battery_levels[i] - battery_level);
                 battery_level = mx_battery_levels[i];
                 distance_value = distance_between_nodes;
                 cout << "batter y level" << battery_level << endl;
+                residual_battery_level = battery_level - 150;
             }
-            if (start_node == depo)
+            // if (end_node == depo and counter!=0)
+            //     break;
+            // counter++;
+            cout << "OHHHHHHHHHHHHH " << distance_value << endl;
+            total_times[i] += (distance_value / ((1 + weight_factor_for_speed[i] * weight) * speed_of_vehicles[i]));
+            cout << "Weight" << weight << endl;
+            battery_level -= ch_required;
+            node_traversor[i].push_back(end_node);
+            if (end_node == depo)
                 break;
+            cout
+                << "start node" << end_node << "node selected" << node_selected << endl
+                << endl;
+
+            weight -= demand_weights[end_node];
+            temp = end_node;
+            if (adjacency_matrix[i][end_node][0] == previous_node)
+                end_node = adjacency_matrix[i][end_node][1];
+            else
+                end_node = adjacency_matrix[i][end_node][0];
+            // end_node = adjacency_matrix[i][end_node][node_selected];
+            cout << "start" << end_node << endl;
+            // if (visited[end_node] != 0 or end_node == previous_node)
+            // {
+            //     node_selected ^= 1;
+            //     end_node = adjacency_matrix[i][temp][node_selected];
+            // }
+            cout << "DEPOOOOOOOOOOOOOOOOOOOOOOOOOO    " << end_node << endl;
+            cout << "WEIGHT " << weight << endl;
+            // visited[end_node] = 1;
+            // node = end_node == adjacency_matrix[i][end_node][node_selected] ? adjacency_matrix[i][end_node][node_selected ^ 1] : adjacency_matrix[i][end_node][node_selected];
+
+            cout
+                << "start node" << end_node << "node selected" << node_selected << "distance value" << distance_value << "discharging value" << discharging_additive << endl
+                << endl;
+            cout << "Battery Level: " << battery_level << "charge req" << ch_required << endl;
+            // int counter = 0;
+            // double distance_between_swapping_nodes = distance_between_nodes;
+            // if (end_node == depo)
+            //     break;
+            cout << "TEMP    " << temp << " end_node " << end_node << endl;
+            distance_between_nodes = distance(locations[temp].first, locations[temp].second, locations[end_node].first, locations[end_node].second);
+
+            ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_between_nodes * (1 + weight_factor_for_distance[i] * weight));
+            distance_value = distance_between_nodes;
             counter++;
+            cout << "CH REQ   " << ch_required << endl;
+            cout << "BATTERY LEVEL " << battery_level << endl;
             previous_node = temp;
         }
+        cout << "END OF VEHICLE            ----------------------------------------------------------" << endl;
     }
     cout << "aman";
 
@@ -426,12 +475,32 @@ signed main()
     {
         total_times[i] += charging_times[i];
         cout << "Total time " << total_times[i] << endl;
+        cout << " Charging cost" << cost_of_charging[i] << endl;
     }
     sort(total_times.begin(), total_times.end(), greater<>());
-
     cout << "Answer is: " << total_times[0] << endl;
 
     /************* Battery Swapping Not Done *************/
 
+    for (int i = 1; i <= mx_vehicles; i++)
+    {
+        for (int j = 0; j < node_traversor[i].size(); j++)
+        {
+            cout << node_traversor[i][j] << " ";
+        }
+        cout << endl;
+    }
+    // for(int i = 1; i<=mx_vehicles;i++)
+    // {
+    //     for(int j =1;j<node_traversor[i].size();j++)
+    //     {
+    //         int x = node_traversor[i][j]/(1e5);
+    //         if(x!=0)
+    //         {
+    //             //that means it was a charging station
+    //             double distance =
+    //         }
+    //     }
+    // }
     return 0;
 }
