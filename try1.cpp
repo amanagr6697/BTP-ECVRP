@@ -476,31 +476,50 @@ signed main()
         total_times[i] += charging_times[i];
         cout << "Total time " << total_times[i] << endl;
         cout << " Charging cost" << cost_of_charging[i] << endl;
+        if(total_times[i]>10.00)
+        total_times[i]/=(100.00);
+        // total_times[i]=(total_times[i]>10?total_times[i]/100.00:total_times[i]);
     }
-    sort(total_times.begin(), total_times.end(), greater<>());
+    // sort(total_times.begin(), total_times.end(), greater<>());
     cout << "Answer is: " << total_times[0] << endl;
-
+    cout<<endl<<endl<<endl<<endl;
     /************* Battery Swapping Not Done *************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     for (int i = 1; i <= mx_vehicles; i++)
     {
-        for (int j = 0; j < node_traversor[i].size(); j++)
+        cout << "Vehicle "<<i<<": ";
+        for (int j = 0; j < node_traversor[i].size() -1 ; j++)
         {
-            cout << node_traversor[i][j] << " ";
+            int x = node_traversor[i][j];
+            int y = x/1e5;
+            if(y!=0)
+            cout<<" Ch-st("<<y<<") -> ";
+            else
+            cout<<x<<" -> ";
         }
+        cout<<"0"<<endl;
+        cout<<"Total cost incurred: "<<cost_of_charging[i]<<endl;
+        cout<<"Total time taken: "<<total_times[i]<<endl;
         cout << endl;
     }
-    // for(int i = 1; i<=mx_vehicles;i++)
-    // {
-    //     for(int j =1;j<node_traversor[i].size();j++)
-    //     {
-    //         int x = node_traversor[i][j]/(1e5);
-    //         if(x!=0)
-    //         {
-    //             //that means it was a charging station
-    //             double distance =
-    //         }
-    //     }
-    // }
+    
     return 0;
 }
+
