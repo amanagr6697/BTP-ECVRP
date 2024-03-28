@@ -7,41 +7,220 @@ double distance(double x1, double y1, double x2, double y2)
 {
     return (double)sqrtl((x1 - x2) * (x1 - x2) * 1.00 + (y1 - y2) * (y1 - y2) * 1.00);
 }
+double randomDouble(double min, double max)
+{
+    // Use the current time as a seed
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937 gen(seed);
+    std::uniform_real_distribution<> dis(min, max);
+    return dis(gen);
+}
+
+int randomInt(int min, int max)
+{
+    // Use the current time as a seed
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937 gen(seed);
+    std::uniform_int_distribution<> dis(min, max);
+    return dis(gen);
+}
+void initialization()
+{
+    
+    int minNumberOfCustomers = 10;
+    int maxNumberOfCustomers = 40;
+
+    int minbatteryChargingStations = 10;
+    int maxbatteryChargingStations = 25;
+
+    int minbatterySwappingStations = 5;
+    int maxbatterySwappingStations = 15;
+
+    int minNumberOfvehicles = 4;
+    int maxNumberOfvehicles = 7;
+
+    mxBatteryChargingStations = randomInt(minbatteryChargingStations, maxbatteryChargingStations);
+    mxBatterySwappingStations = randomInt(minbatterySwappingStations, maxbatterySwappingStations);
+    mxVehicles = randomInt(minNumberOfvehicles, maxNumberOfvehicles);
+    mxCustomers = randomInt(minNumberOfCustomers, maxNumberOfCustomers);
+
+    locations.resize(mxCustomers+1);
+    demandWeights.resize(mxCustomers+1);
+    batteryChargingStations.resize(mxBatteryChargingStations+1);
+    batterySwappingStations.resize(mxBatterySwappingStations+1);
+    mxBatteryLevels.resize(mxVehicles+1);
+    mxCostAllowed.resize(mxVehicles+1);
+    speedOfVehicles.resize(mxVehicles+1);
+    weightFactorForDistance.resize(mxVehicles+1);
+    weightFactorForSpeed.resize(mxVehicles+1);
+    mxWeightAllowed.resize(mxVehicles+1);
+
+    double minWeightLoadForvehicle = 50;
+    double maxWeightLoadForvehicle = 90;
+
+    // double max allowed vehicle cost
+    double mincostAllowedForvehicle = 2000;
+    double maxcostAllowedForvehicle = 4500;
+
+    double minChargeLimit = 1500;
+    double maxChargeLimit = 2500;
+
+    double minSpeedForvehicle = 8;
+    double maxSpeedForvehicle = 20;
+
+    double minWeightFactorForSpeed = 0.01;
+    double maxWeightFactorForSpeed = 0.15;
+
+    double minWeightFactorForDistance = 0.01;
+    double maxWeightFactorForDistance = 0.15;
+
+    double minCustomerDemandWeight = 13;
+    double maxCustomerDemandWeight = 29;
+
+    double minXCoordinate = 10;
+    double maxXCoordinate = 30;
+
+    double minYCoordinate = 10;
+    double maxYCoordinate = 30;
+
+    for (int i = 1; i <= mxVehicles; i++)
+    {
+        mxWeightAllowed[i] = randomDouble(minWeightLoadForvehicle, maxWeightLoadForvehicle);
+        mxCostAllowed[i] = randomDouble(mincostAllowedForvehicle, maxcostAllowedForvehicle);
+        mxBatteryLevels[i] = randomDouble(minChargeLimit, maxChargeLimit);
+        speedOfVehicles[i] = randomDouble(minSpeedForvehicle, maxSpeedForvehicle);
+        weightFactorForSpeed[i] = randomDouble(minWeightFactorForSpeed, maxWeightFactorForSpeed);
+        weightFactorForDistance[i] = randomDouble(minWeightFactorForDistance, maxWeightFactorForDistance);
+    }
+
+    for (int i = 1; i <= mxCustomers; i++)
+    {
+        demandWeights[i] = randomDouble(minCustomerDemandWeight, maxCustomerDemandWeight);
+        locations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
+        locations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
+    }
+
+    for (int i = 1; i <= mxBatteryChargingStations; i++)
+    {
+        batteryChargingStations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
+        batteryChargingStations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
+    }
+
+    for (int i = 1; i <= mxBatterySwappingStations; i++)
+    {
+        batterySwappingStations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
+        batterySwappingStations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
+    }
+
+    double minFastChargerCostPerUnitOfCharge = 2.5;
+    double maxFastCHargerCostPerUnitOfCharge = 3.8;
+
+    double minSlowChargerCostPerUnitOfCharge = 0.8;
+    double maxSlowChargerCostPerUnitOfCharge = 1.1;
+
+    double minMediumChargerCostPerUnitOfCharge = 1.4;
+    double maxMediumChargerCostPerUnitOfCharge = 1.9;
+
+    double minBatterySwappingCost = 28;
+    double maxBatterySwappingCost = 45;
+
+    costPerUnitChargeOfMedium = randomDouble(minMediumChargerCostPerUnitOfCharge, maxMediumChargerCostPerUnitOfCharge);
+    costPerUnitChargeOfFast = randomDouble(minFastChargerCostPerUnitOfCharge, maxFastCHargerCostPerUnitOfCharge);
+    costPerUnitChargeOfSlow = randomDouble(minSlowChargerCostPerUnitOfCharge, maxSlowChargerCostPerUnitOfCharge);
+
+    batterySwappingCost = randomDouble(minBatterySwappingCost, maxBatterySwappingCost);
+
+    double minFastChargingRate = 0.004;
+    double maxFastChargingRate = 0.007;
+
+    double minMediumChargingRate = 0.009;
+    double maxMediumChargingRate = 0.013;
+
+    double minSlowChargingRate = 0.015;
+    double maxSlowChargingRate = 0.020;
+
+    fastChargingTimePerUnitOfCharge = randomDouble(minFastChargingRate, maxFastChargingRate);
+
+    mediumChargingTimePerUnitOfCharge = randomDouble(minMediumChargingRate, maxMediumChargingRate);
+
+    slowChargingTimePerUnitOfCharge = randomDouble(minSlowChargingRate, maxSlowChargingRate);
+
+    double dischargingConst = 10;
+
+    double temperature = 300;
+
+    double scalingFactor = 0.03;
+
+    double parameter = 0.5;
+
+    int minNumberOfFastChargers = 1;
+    int maxNumberOfFastChargers = 3;
+
+    int minNumberOfMediumChargers = 1;
+    int maxNumberOfMediumChargers = 3;
+
+    int minNumberOfSlowChargers = 1;
+    int maxNumberOfSlowChargers = 3;
+
+    fastTimeChargers = randomInt(minNumberOfFastChargers, maxNumberOfFastChargers);
+
+    mediumTimeChargers = randomInt(minNumberOfMediumChargers, maxNumberOfMediumChargers);
+
+    slowTimeChargers = randomInt(minNumberOfSlowChargers, maxNumberOfSlowChargers);
+
+    double minTemperature = 260;
+    double maxTemperature = 330;
+
+    temperature = randomDouble(minTemperature, maxTemperature);
+
+    double minScalingFactor = 0.02;
+    double maxScalingFactor = 0.05;
+
+    scalingFactor = randomDouble(minScalingFactor, maxScalingFactor);
+
+    double minParameterValue = 0.3;
+    double maxParameterValue = 0.5;
+
+    parameter = randomDouble(minScalingFactor, maxScalingFactor);
+
+    //Resizing
+}
 
 signed main()
 {
+    // initialization();
     // Vehicle Assignment part.
     /************* Vehicle Assignment Part *************/
-    cout << mx_customers;
+    cout << mxCustomers;
     // Weight assigning
     vector<pair<double, int>> demand;
     int cnt = 1;
-    // cout << "aman";
-    for (int i = 1; i < demand_weights.size(); i++)
+    cout << "aman";
+    for (int i = 1; i < demandWeights.size(); i++)
     {
-        demand.push_back({demand_weights[i], i});
+        demand.push_back({demandWeights[i], i});
         cnt++;
     }
-    // cout << "cnt" << cnt << endl;
+    cout << "cnt" << cnt << endl;
     sort(demand.begin(), demand.end(), greater<>());
     // cout << "aman";
     // cout << demand.size();
     priority_queue<pair<double, int>> allot_weights;
-    for (int i = 1; i < mx_weight_allowed.size(); i++)
-        allot_weights.push({mx_weight_allowed[i], i});
+    for (int i = 1; i < mxWeightAllowed.size(); i++)
+        allot_weights.push({mxWeightAllowed[i], i});
     // cout << "aman";
 
-    vector<pair<double, vector<int>>> filled_weights(mx_vehicles + 1);
+    vector<pair<double, vector<int>>> filled_weights(mxVehicles + 1);
 
     for (auto &i : filled_weights)
         i.first = 0;
 
-    // cout << "size" << allot_weights.size();
+    cout << "size" << allot_weights.size();
     int counter = 0;
     while (1)
     {
         // cout << "counter" << counter << endl;
-        if (counter == mx_customers)
+        if (counter == mxCustomers)
             break;
         auto top = allot_weights.top();
         cout << top.first;
@@ -78,7 +257,7 @@ signed main()
 
     string baseCommand = "tsp vehicle_";
 
-    vector<vector<int>> vehicleCustomerMapping(mx_vehicles + 1, vector<int>(mx_customers + 1, 0));
+    vector<vector<int>> vehicleCustomerMapping(mxVehicles + 1, vector<int>(mxCustomers + 1, 0));
     for (auto i : filled_weights)
     {
         if (counter == 0)
@@ -117,11 +296,11 @@ signed main()
     // Battery charge specifying
     /************* Creating graph from the traversors  *************/
 
-    vector<int> adjacency_matrix[mx_vehicles + 1][mx_customers + 1];
+    vector<int> adjacency_matrix[mxVehicles + 1][mxCustomers + 1];
 
     vector<int> vehicle_sizes;
     vehicle_sizes.push_back(0);
-    for (int i = 1; i < mx_battery_levels.size(); i++)
+    for (int i = 1; i < mxBatteryLevels.size(); i++)
     {
         string fileName = "vehicle_" + to_string(i) + ".txt.tour";
 
@@ -163,7 +342,7 @@ signed main()
         adjacency_matrix[i][temp_nodes[0]].push_back(temp_nodes[temp_nodes.size() - 1]);
         adjacency_matrix[i][temp_nodes[temp_nodes.size() - 1]].push_back(temp_nodes[0]);
 
-        for (int j = 0; j <= mx_customers; j++)
+        for (int j = 0; j <= mxCustomers; j++)
         {
             cout << "yeah i " << i << "j " << j << "size " << adjacency_matrix[i][j].size() << endl;
             if (adjacency_matrix[i][j].size() != 0)
@@ -178,14 +357,14 @@ signed main()
     /************* Satisfying each vehicle's charging constraint by visiting multiple depot's *************/
 
     cout << "amancompleted";
-    vector<vector<vector<int>>> charge_requirement(mx_vehicles + 1, vector<vector<int>>(mx_battery_charging_stations + 1));
-    double discharging_additive = discharging_const * parameter + temperature * sclaing_factor;
+    vector<vector<vector<int>>> charge_requirement(mxVehicles + 1, vector<vector<int>>(mxBatteryChargingStations + 1));
+    double discharging_additive = dischargingConst * parameter + temperature * scalingFactor;
     cout << "DISCHARGIng " << discharging_additive << endl;
     // The lesser distance that I cover in the initial phase where I am having lesser weight, it should be better.
-    vector<int> node_traversor[mx_vehicles + 1];
-    vector<double> total_times(mx_vehicles + 1);
+    vector<int> node_traversor[mxVehicles + 1];
+    vector<double> total_times(mxVehicles + 1);
 
-    for (int i = 1; i <= mx_vehicles; i++)
+    for (int i = 1; i <= mxVehicles; i++)
     {
         double weight = filled_weights[i].first;
         cout << "Weight: " << weight << endl;
@@ -195,7 +374,7 @@ signed main()
 
         int end_node = depo;
 
-        double battery_level = mx_battery_levels[i];
+        double battery_level = mxBatteryLevels[i];
         // node_traversor[i].push_back(end_node);
         cout << "ROCKS" << adjacency_matrix[i][end_node][0] << "bhak" << adjacency_matrix[i][end_node][1] << endl
              << endl;
@@ -222,12 +401,12 @@ signed main()
 
         cout << "Vehicle" << i << "start node" << end_node << endl
              << endl;
-        bool visited[mx_customers + 1] = {0};
+        bool visited[mxCustomers + 1] = {0};
         int counter = 0;
         end_node = adjacency_matrix[i][end_node][node_selected];
         double distance_between_nodes = distance(locations[depo].first, locations[depo].second, locations[end_node].first, locations[end_node].second);
         int temp = depo;
-        ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_value * (1 + weight_factor_for_distance[i] * weight));
+        ch_required = (discharging_additive + weight * 1.0 / mxWeightAllowed[i]) * (distance_value * (1 + weightFactorForDistance[i] * weight));
         cout << "End node " << end_node << endl;
         cout << "CH REQ " << ch_required << endl;
         cout << "MAX battery " << battery_level << endl;
@@ -254,22 +433,22 @@ signed main()
                 int ch_station = -1;
                 double to_ch_station_charge = -1;
 
-                for (int j = 1; j <= mx_battery_charging_stations; j++)
+                for (int j = 1; j <= mxBatteryChargingStations; j++)
                 {
                     double dist;
                     if (counter == 0)
-                        dist = distance(locations[temp].first, locations[temp].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                        dist = distance(locations[temp].first, locations[temp].second, batteryChargingStations[j].first, batteryChargingStations[j].second);
                     else
-                        dist = distance(battery_ch_stations[(node_traversor[i].back() / (1e5))].first, battery_ch_stations[(node_traversor[i].back() / (1e5))].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
+                        dist = distance(batteryChargingStations[(node_traversor[i].back() / (1e5))].first, batteryChargingStations[(node_traversor[i].back() / (1e5))].second, batteryChargingStations[j].first, batteryChargingStations[j].second);
                     cout << "DIST   " << dist << endl;
-                    double distance_between_charging = distance(locations[end_node].first, locations[end_node].second, battery_ch_stations[j].first, battery_ch_stations[j].second);
-                    cout << "Battery " << battery_ch_stations[j].first << " " << battery_ch_stations[j].second << endl;
+                    double distance_between_charging = distance(locations[end_node].first, locations[end_node].second, batteryChargingStations[j].first, batteryChargingStations[j].second);
+                    cout << "Battery " << batteryChargingStations[j].first << " " << batteryChargingStations[j].second << endl;
                     cout << "Temp " << temp << " " << locations[temp].first << " " << locations[temp].second << endl;
                     cout<<"Node between charging distance "<<distance_between_charging<<endl;
                     cout<<"Node between node distance "<<distance_between_nodes<<endl;
 
                     cout << "j is " << j << " dist is " << dist << "distance between charging" << distance_between_charging << "distance between nodes" << distance_between_nodes << endl;
-                    double battery_ch_required_for_previous_to_next = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (dist * (1 + weight_factor_for_distance[i] * weight));
+                    double battery_ch_required_for_previous_to_next = (discharging_additive + weight * 1.0 / mxWeightAllowed[i]) * (dist * (1 + weightFactorForDistance[i] * weight));
                     cout << "BATTERY CHARGE " << battery_ch_required_for_previous_to_next << endl;
                     cout << "WEIGHT " << weight << endl;
                     if (distance_between_charging < distance_between_nodes && battery_ch_required_for_previous_to_next < residual_battery_level)
@@ -310,11 +489,11 @@ signed main()
                 // double swapping_node_distance_value;
                 // if (ch_station != -1)
                 // {
-                distance_between_nodes = distance(battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second, locations[end_node].first, locations[end_node].second);
+                distance_between_nodes = distance(batteryChargingStations[ch_station].first, batteryChargingStations[ch_station].second, locations[end_node].first, locations[end_node].second);
                 if (counter == 0)
-                    distance_value = distance(locations[temp].first, locations[temp].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
+                    distance_value = distance(locations[temp].first, locations[temp].second, batteryChargingStations[ch_station].first, batteryChargingStations[ch_station].second);
                 else
-                    distance_value = distance(battery_ch_stations[(node_traversor[i].back() / (1e5))].first, battery_ch_stations[(node_traversor[i].back() / (1e5))].second, battery_ch_stations[ch_station].first, battery_ch_stations[ch_station].second);
+                    distance_value = distance(batteryChargingStations[(node_traversor[i].back() / (1e5))].first, batteryChargingStations[(node_traversor[i].back() / (1e5))].second, batteryChargingStations[ch_station].first, batteryChargingStations[ch_station].second);
                 cout << "ch station" << ch_station << endl;
                 // }
                 // if(swap_station!=-1)
@@ -326,12 +505,12 @@ signed main()
                 //         swapping_node_distance_value = distance(battery_swap_stations[(node_traversor[i].back() / (1e5))].first, battery_swap_stations[(node_traversor[i].back() / (1e5))].second, battery_swap_stations[ch_station].first, battery_swap_stations[ch_station].second);
                 // }
 
-                charge_requirement[i][ch_station].push_back(mx_battery_levels[i] - to_ch_station_charge);
-                total_times[i] += (distance_value / ((1 + weight_factor_for_speed[i] * weight) * speed_of_vehicles[i]));
+                charge_requirement[i][ch_station].push_back(mxBatteryLevels[i] - to_ch_station_charge);
+                total_times[i] += (distance_value / ((1 + weightFactorForSpeed[i] * weight) * speedOfVehicles[i]));
                 node_traversor[i].push_back(ch_station * 1e5);
-                ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_between_nodes * (1 + weight_factor_for_distance[i] * weight));
+                ch_required = (discharging_additive + weight * 1.0 / mxWeightAllowed[i]) * (distance_between_nodes * (1 + weightFactorForDistance[i] * weight));
                 cout << "charge required" << ch_required << endl;
-                battery_level = mx_battery_levels[i];
+                battery_level = mxBatteryLevels[i];
                 distance_value = distance_between_nodes;
                 cout << "batter y level" << battery_level << endl;
                 residual_battery_level = battery_level - 150;
@@ -340,7 +519,7 @@ signed main()
             //     break;
             // counter++;
             cout << "OHHHHHHHHHHHHH " << distance_value << endl;
-            total_times[i] += (distance_value / ((1 + weight_factor_for_speed[i] * weight) * speed_of_vehicles[i]));
+            total_times[i] += (distance_value / ((1 + weightFactorForSpeed[i] * weight) * speedOfVehicles[i]));
             cout << "Weight" << weight << endl;
             battery_level -= ch_required;
             node_traversor[i].push_back(end_node);
@@ -350,7 +529,7 @@ signed main()
                 << "start node" << end_node << "node selected" << node_selected << endl
                 << endl;
 
-            weight -= demand_weights[end_node];
+            weight -= demandWeights[end_node];
             temp = end_node;
             if (adjacency_matrix[i][end_node][0] == previous_node)
                 end_node = adjacency_matrix[i][end_node][1];
@@ -379,7 +558,7 @@ signed main()
             cout << "TEMP    " << temp << " end_node " << end_node << endl;
             distance_between_nodes = distance(locations[temp].first, locations[temp].second, locations[end_node].first, locations[end_node].second);
 
-            ch_required = (discharging_additive + weight * 1.0 / mx_weight_allowed[i]) * (distance_between_nodes * (1 + weight_factor_for_distance[i] * weight));
+            ch_required = (discharging_additive + weight * 1.0 / mxWeightAllowed[i]) * (distance_between_nodes * (1 + weightFactorForDistance[i] * weight));
             distance_value = distance_between_nodes;
             counter++;
             cout << "CH REQ   " << ch_required << endl;
@@ -400,34 +579,34 @@ signed main()
 
     /************* Charging completed, now ensuring that all the vehicles remain in their cost *************/
 
-    vector<double> charging_times(mx_vehicles + 1);
+    vector<double> charging_times(mxVehicles + 1);
 
-    vector<double> cost_of_charging(mx_vehicles + 1);
+    vector<double> cost_of_charging(mxVehicles + 1);
 
-    for (int i = 1; i <= mx_vehicles; i++)
+    for (int i = 1; i <= mxVehicles; i++)
     {
         for (auto stations : charge_requirement[i])
         {
             for (auto charge : stations)
             {
                 cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << charge << endl;
-                cost_of_charging[i] += (charge * cost_per_unit_charge_of_fast);
-                charging_times[i] += (charge * fast_ch_time_per_unit_of_charge);
-                cout << "charge" << charge << endl;
+                cost_of_charging[i] += (charge * costPerUnitChargeOfFast);
+                charging_times[i] += (charge * fastChargingTimePerUnitOfCharge);
+                cout << "charge" << charge << cost_of_charging[i]<<endl;
             }
         }
     }
-    for (int i = 1; i <= mx_vehicles; i++)
+    for (int i = 1; i <= mxVehicles; i++)
     {
         cout << "charging cost" << cost_of_charging[i] << endl;
         cout << "charging time" << charging_times[i] << endl;
     }
 
     // Balancing cost
-    for (int i = 1; i <= mx_vehicles; i++)
+    for (int i = 1; i <= mxVehicles; i++)
     {
         priority_queue<pair<double, pair<int, int>>> charge_storage;
-        for (int j = 1; j <= mx_battery_charging_stations; j++)
+        for (int j = 1; j <= mxBatteryChargingStations; j++)
         {
             for (int k = 0; k < charge_requirement[i][j].size(); k++)
             {
@@ -436,14 +615,13 @@ signed main()
         }
 
         bool medium_or_slow = 0; // 0 denotes for fast to medium and 1 dentoes from medium to slow
-        cout << "cost of charrging" << cost_of_charging[i] << " mx cost allowed " << mx_cost_allowed[i] << endl;
+        cout << "cost of charrging" << cost_of_charging[i] << " mx cost allowed " << mxCostAllowed[i] << endl;
 
-        map<pair<int, int>, bool> mapping_for_station[mx_vehicles + 1];
-        double total_cost_saved = 0;
+        map<pair<int, int>, bool> mapping_for_station[mxVehicles + 1];
         // 0 means from fast to medium and 1 means from medium to slow if for same charging station
-        while (cost_of_charging[i] > mx_cost_allowed[i])
+        while (cost_of_charging[i] > mxCostAllowed[i])
         {
-            double extra = (cost_of_charging[i] - mx_cost_allowed[i]);
+            double extra = (cost_of_charging[i] - mxCostAllowed[i]);
             cout << "extra" << extra << endl;
 
             if (charge_storage.size() == 0)
@@ -454,31 +632,32 @@ signed main()
             auto top = charge_storage.top();
             medium_or_slow = mapping_for_station[i][top.second];
             cout << "mdium or losw" << medium_or_slow << endl;
-            double value = top.first * (medium_or_slow == 0 ? cost_per_unit_charge_of_medium : cost_per_unit_charge_of_slow);
-            double cost_saved = (top.first) * ((medium_or_slow == 0 ? cost_per_unit_charge_of_fast : cost_per_unit_charge_of_medium) - (medium_or_slow == 0 ? cost_per_unit_charge_of_medium : cost_per_unit_charge_of_slow));
+            double value = top.first * (medium_or_slow == 0 ? costPerUnitChargeOfMedium : costPerUnitChargeOfSlow);
+            double cost_saved = (top.first) * ((medium_or_slow == 0 ? costPerUnitChargeOfFast : costPerUnitChargeOfMedium) - (medium_or_slow == 0 ? costPerUnitChargeOfMedium : costPerUnitChargeOfSlow));
             cout << "value " << value << " cost saved " << cost_saved << endl;
-            total_cost_saved += cost_saved;
-            charging_times[i] += (top.first) * ((medium_or_slow == 0 ? medium_ch_time_per_unit_of_charge : slow_ch_time_per_unit_of_charge) - (medium_or_slow == 0 ? fast_ch_time_per_unit_of_charge : medium_ch_time_per_unit_of_charge));
-            cout << "total cost savaved" << total_cost_saved << endl;
-            cost_of_charging[i] -= total_cost_saved;
+            charging_times[i] += (top.first) * ((medium_or_slow == 0 ? mediumChargingTimePerUnitOfCharge : slowChargingTimePerUnitOfCharge) - (medium_or_slow == 0 ? fastChargingTimePerUnitOfCharge : mediumChargingTimePerUnitOfCharge));
+            // cost_of_charging[i] -= total_cost_saved;
             charge_storage.pop();
             if (mapping_for_station[i][top.second] == 0)
                 charge_storage.push({top.first - cost_saved, top.second});
+            cout<<"charging cost"<<cost_of_charging[i]<<endl;
             cost_of_charging[i] -= cost_saved;
+            cout<<"Cost saved"<<cost_saved<<endl;
+            cout<<"charging cost"<<cost_of_charging[i]<<endl;
+            cout<<"Cost of charging "<<cost_of_charging[i]<<endl;
             mapping_for_station[i][top.second] = 1;
         }
     }
 
     /************* Cost Optimisation Also Done ****************/
 
-    for (int i = 1; i <= mx_vehicles; i++)
+    for (int i = 1; i <= mxVehicles; i++)
     {
         total_times[i] += charging_times[i];
         cout << "Total time " << total_times[i] << endl;
         cout << " Charging cost" << cost_of_charging[i] << endl;
-        if(total_times[i]>10.00)
-        total_times[i]/=(100.00);
-        // total_times[i]=(total_times[i]>10?total_times[i]/100.00:total_times[i]);
+        // if(total_times[i]>10.00)
+        // total_times[i]/=(100.00);
     }
     // sort(total_times.begin(), total_times.end(), greater<>());
     cout << "Answer is: " << total_times[0] << endl;
@@ -502,7 +681,7 @@ signed main()
 
 
 
-    for (int i = 1; i <= mx_vehicles; i++)
+    for (int i = 1; i <= mxVehicles; i++)
     {
         cout << "Vehicle "<<i<<": ";
         for (int j = 0; j < node_traversor[i].size() -1 ; j++)

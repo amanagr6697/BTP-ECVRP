@@ -1,7 +1,6 @@
-#include "Variables.h"
-
+#include "variables.h"
 std::vector<std::pair<double, double>> locations = {
-    {23,27}, //depo location
+    {23, 27}, // depo location
     {20, 15},
     {10, 25},
     {15, 10},
@@ -13,68 +12,73 @@ std::vector<std::pair<double, double>> locations = {
     {21, 20},
     {16, 13}};
 
-std::vector<double> demand_weights = {0,20, 12, 28, 18, 15, 25, 13, 17, 30, 10};
+std::vector<double> demandWeights = {0, 20, 12, 28, 18, 15, 25, 13, 17, 30, 10};
 
-std::vector<double> mx_battery_levels = {0,2200, 1910, 2020, 1340};
+std::vector<double> mxBatteryLevels = {0, 2200, 1910, 2020, 1340}; // in wh
 
-std::vector<double> mx_cost_allowed = {0,4500, 2000, 400, 1200};
+std::vector<double> mxCostAllowed = {0, 4500, 2000, 400, 1200}; // in rs
 
-std::vector<double> mx_weight_allowed = {0,80, 50, 70, 60};
+std::vector<double> mxWeightAllowed = {0, 80, 50, 70, 60}; // in kg
 
-double fast_ch_time_per_unit_of_charge = 0.5;
+double fastChargingTimePerUnitOfCharge = 0.005; // in hours/wh
 
-double medium_ch_time_per_unit_of_charge = 0.8;
+double mediumChargingTimePerUnitOfCharge = 0.008; // in hours/wh
 
-double slow_ch_time_per_unit_of_charge = 1.3;
+double slowChargingTimePerUnitOfCharge = 0.013; // in hours/wh
 
-double battery_swapping_cost = 50;
+double batterySwappingCost = 30; // in rs
 
-double battery_swapping_time = 0.2;
+double batterySwappingTime = 0.2; // in hours
 
-int mx_vehicles = 4;
+int mxVehicles = 4;
 
-int mx_customers = 10;
+int mxCustomers = 10;
 
-std::vector<std::pair<double, double>> battery_ch_stations = {
-    {23,27},
+std::vector<std::pair<double, double>> batteryChargingStations = {
+    {23, 27},
     {13, 12},
     {19, 12},
     {13, 8},
-    {25,28},
-    {8,19},{18,12},{14,18},{19,12},{8,9},{3,9},{2,11},{24,29}};
+    {25, 28},
+    {8, 19},
+    {18, 12},
+    {14, 18},
+    {19, 12},
+    {8, 9},
+    {3, 9},
+    {2, 11},
+    {24, 29}};
 
-std::vector<std::pair<double, double>> battery_swap_stations = {
-    {23,27},
+std::vector<std::pair<double, double>> batterySwappingStations = {
+    {23, 27},
     {15, 11},
     {18, 7},
     {29, 13}};
 
-double discharging_const = 10;
+double dischargingConst = 10;
 
 double temperature = 300;
 
-double sclaing_factor = 0.03;
+double scalingFactor = 0.03;
 
 double parameter = 0.5;
 
-int fast_time_chargers = 2;
+int fastTimeChargers = 2;
 
-int medium_time_chargers = 2;
+int mediumTimeChargers = 2;
 
-int slow_time_chargers = 4;
+int slowTimeChargers = 4;
 
-double cost_per_unit_charge_of_fast = 5;
-double cost_per_unit_charge_of_medium = 3;
-double cost_per_unit_charge_of_slow = 1;
+double costPerUnitChargeOfFast = 3; // in rs/wh
+double costPerUnitChargeOfMedium = 1.4;
+double costPerUnitChargeOfSlow = 0.9;
 
-std::vector<double> speed_of_vehicles = {0, 12, 9, 13, 17};
+std::vector<double> speedOfVehicles = {0, 12, 9, 13, 17};
 
-std::vector<double> weight_factor_for_speed = {0, 0.13, 0.17, 0.09, 0.03};
+std::vector<double> weightFactorForSpeed = {0, 0.13, 0.17, 0.09, 0.03};
 
-std::vector<double> weight_factor_for_distance = {0, 0.13, 0.17, 0.09, 0.03};
+std::vector<double> weightFactorForDistance = {0, 0.13, 0.17, 0.09, 0.03};
 
-double charge_per_unit_of_distance = 7;
+int mxBatteryChargingStations = 12;
+int mxBatterySwappingStations = 5;
 
-int mx_battery_charging_stations =12;
-
-int mx_battery_swapping=4;
