@@ -23,21 +23,21 @@ class TSP
 private:
 
 	struct City{
-		int x;
-		int y;
+		long long int x;
+		long long int y;
 	};
 
 	string iFile;
 	string oFile;
 
 	// List of odd nodes
-	vector<int>odds;
+	vector<long long int>odds;
 
 	//Smaller cost matrix to find minimum matching on odd nodes
-	int **cost;
+	long long int **cost;
 
 	//Adjacency list
-	vector<int> *adjList;
+	vector<long long int> *adjList;
 
 	void findOdds();
 
@@ -48,23 +48,23 @@ protected:
 
 public:
 	// Number of cities
-	int n;
+	long long int n;
 
 	//path
-	int **path_vals;
+	long long int **path_vals;
 
 	//Shortest path length
-	int pathLength;
+	long long int pathLength;
 
 	//euler circuit
-	vector<int> circuit;
+	vector<long long int> circuit;
 
 	vector<City> cities;
 
 	// n x n, pairwise distances between cities
-	int **graph;
+	long long int **graph;
 
-  vector<int>* adjlist;
+  vector<long long int>* adjlist;
 
 	// Constructor
 	TSP(string in, string out);
@@ -72,21 +72,21 @@ public:
 	// Destructor
 	~TSP();
 
-	int get_distance(struct City c1, struct City c2);
+	long long int get_distance(struct City c1, struct City c2);
 
 	//Find perfect matching
 	void perfectMatching();
 
 	//Find Euler tour
-	void euler_tour(int start, vector<int> &path);
+	void euler_tour(long long int start, vector<long long int> &path);
 
 	//Find Hamiltonian path
-	void make_hamiltonian(vector<int> &path, int &pathCost);
+	void make_hamiltonian(vector<long long int> &path, long long int &pathCost);
 
 	// Prim's algorithm
 	void findMST();
 
-	int getMinIndex(int key[], bool mst[]);
+	long long int getMinIndex(long long int key[], bool mst[]);
 
 	void printResult();
 	void printPath();
@@ -94,11 +94,11 @@ public:
 	void printAdjList();
 	void printCities();
 
-	int get_size(){return n;};
+	long long int get_size(){return n;};
 
 	void fillMatrix();
 
-	int findBestPath(int start);
+	long long int findBestPath(long long int start);
 
 };
 

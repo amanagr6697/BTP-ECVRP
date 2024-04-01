@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 	// Create new tsp object
 	TSP tsp(input, output);
 	cout << "tsp created" << endl;
-	int tsp_size = tsp.get_size();
+	long long int tsp_size = tsp.get_size();
 
 	// Fill N x N matrix with distances between nodes
 	cout << "Fillmatrix started" << endl;
@@ -32,10 +32,10 @@ int main(int argc, char** argv) {
 	cout << "Matching completed" << endl;
 
 	// Loop through each index and find shortest path
-	int best = INT_MAX;
-	int bestIndex;
+	long long int best = INT_MAX;
+	long long int bestIndex;
 	for (long t = 0; t < tsp_size; t++) {
-		int result = tsp.findBestPath(t);
+		long long int result = tsp.findBestPath(t);
 
 		tsp.path_vals[t][0] = t; // set start
 		tsp.path_vals[t][1] = result; // set end
