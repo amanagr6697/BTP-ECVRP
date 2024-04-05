@@ -33,4 +33,7 @@ extern double costPerUnitChargeOfSlow;
 extern std::vector<double> speedOfVehicles;
 extern std::vector<double> weightFactorForSpeed;
 extern std::vector<double> weightFactorForDistance;
+void parseJSONFileAndFillVariables();
+void readTextData();
+void writeJSONToFile();
 #endif

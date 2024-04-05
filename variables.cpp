@@ -1,4 +1,15 @@
 #include "variables.h"
+#include <bits/stdc++.h>
+#include "rapidjson/document.h"
+#include "rapidjson/filereadstream.h"
+#include "rapidjson/stringbuffer.h"
+
+#include "rapidjson/writer.h"
+#include "rapidjson/ostreamwrapper.h"
+#include "rapidjson/prettywriter.h"
+
+using namespace rapidjson;
+using namespace std;
 std::vector<std::pair<double, double>> locations = {
     {23, 27}, // depo location
     {20, 15},
@@ -82,3 +93,120 @@ std::vector<double> weightFactorForDistance = {0, 0.13, 0.17, 0.09, 0.03};
 int mxBatteryChargingStations = 12;
 int mxBatterySwappingStations = 5;
 
+void parseJSONFileAndFillVariables()
+{
+    cout << "AMAN" << endl;
+    string filename = "data.json";
+
+    ifstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Failed to open JSON file." << endl;
+        return;
+    }
+
+    string jsonData((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+
+    Document document;
+    document.Parse(jsonData.c_str());
+
+    if (document.HasParseError())
+    {
+        cerr << "Failed to parse JSON data." << endl;
+        return;
+    }
+
+    if (!document.HasMember("inputs") || !document["inputs"].IsArray())
+    {
+        cerr << "Invalid JSON structure." << endl;
+        return;
+    }
+
+    const Value &inputs = document["inputs"];
+
+    for (SizeType i = 0; i < inputs.Size(); i++)
+    {
+        const Value &input = inputs[i];
+        if (input.HasMember("latitude") && input.HasMember("longitude") &&
+            input["latitude"].IsDouble() && input["longitude"].IsDouble())
+        {
+            double latitude = input["latitude"].GetDouble();
+            double longitude = input["longitude"].GetDouble();
+            locations[i].first = latitude;
+            locations[i].second = longitude;
+        }
+        else
+        {
+            cerr << "Invalid input data at index " << i << endl;
+        }
+    }
+}
+
+void writeJSONToFile(const std::string &filename, const rapidjson::Document &document) {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file for writing: " << filename << std::endl;
+        return;
+    }
+
+    rapidjson::OStreamWrapper osw(file);
+    rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+    document.Accept(writer);
+}
+
+void readTextData() {
+    rapidjson::Document document(rapidjson::kObjectType);
+
+    std::ifstream infile("output.txt");
+
+    std::string line;
+    rapidjson::Value vehicles(rapidjson::kArrayType);
+
+    while (getline(infile, line)) {
+        if (line == "End") {
+            continue; // Skip "End" lines
+        }
+
+        rapidjson::Value vehicleObj(rapidjson::kObjectType);
+        int vehicleNumber = std::stoi(line);
+
+        getline(infile, line); // Read next line for total cost
+        double totCost = std::stod(line);
+
+        getline(infile, line); // Read next line for total time
+        double totTime = std::stod(line);
+
+        vehicleObj.AddMember("VehicleNumber", vehicleNumber, document.GetAllocator());
+        vehicleObj.AddMember("TotCost", totCost, document.GetAllocator());
+        vehicleObj.AddMember("TotTime", totTime, document.GetAllocator());
+
+        rapidjson::Value nodes(rapidjson::kArrayType);
+
+        while (getline(infile, line) && line != "End") {
+            rapidjson::Value node(rapidjson::kObjectType);
+            node.AddMember("Latitude", std::stod(line), document.GetAllocator());
+
+            getline(infile, line); // Read next line for longitude
+            node.AddMember("Longitude", std::stod(line), document.GetAllocator());
+
+            getline(infile, line); // Read next line for ChStation
+            bool chStation = line == "1";
+            node.AddMember("ChStation", chStation, document.GetAllocator());
+
+            getline(infile, line); // Read next line for BatterySwapStation
+            bool batterySwapStation = line == "1";
+            node.AddMember("BatterySwapStation", batterySwapStation, document.GetAllocator());
+
+            nodes.PushBack(node, document.GetAllocator());
+        }
+
+        vehicleObj.AddMember("Nodes", nodes, document.GetAllocator());
+        vehicles.PushBack(vehicleObj, document.GetAllocator());
+    }
+
+    infile.close();
+
+    document.AddMember("Data", vehicles, document.GetAllocator());
+
+    writeJSONToFile("output.json", document);
+}

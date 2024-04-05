@@ -1,0 +1,104 @@
+{
+  "Data": [
+    {
+      "VehicleNumber": 1,
+      "TotCost": 2930.2,
+      "TotTime": 18.1805,
+      "Nodes": [
+        {
+          "Latitude": 21.0,
+          "Longitude": 20.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 8.0,
+          "Longitude": 18.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 24.0,
+          "Longitude": 29.0,
+          "ChStation": true,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 30.0,
+          "Longitude": 20.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        }
+      ]
+    },
+    {
+      "VehicleNumber": 2,
+      "TotCost": 1902.6,
+      "TotTime": 13.3067,
+      "Nodes": [
+        {
+          "Latitude": 20.0,
+          "Longitude": 15.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 14.0,
+          "Longitude": 18.0,
+          "ChStation": true,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 10.0,
+          "Longitude": 25.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        }
+      ]
+    },
+    {
+      "VehicleNumber": 3,
+      "TotCost": 0.0,
+      "TotTime": 1.68646,
+      "Nodes": [
+        {
+          "Latitude": 22.0,
+          "Longitude": 28.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 15.0,
+          "Longitude": 10.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 16.0,
+          "Longitude": 13.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        }
+      ]
+    },
+    {
+      "VehicleNumber": 4,
+      "TotCost": 0.0,
+      "TotTime": 2.62023,
+      "Nodes": [
+        {
+          "Latitude": 15.0,
+          "Longitude": 30.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        },
+        {
+          "Latitude": 25.0,
+          "Longitude": 5.0,
+          "ChStation": false,
+          "BatterySwapStation": false
+        }
+      ]
+    }
+  ]
+}

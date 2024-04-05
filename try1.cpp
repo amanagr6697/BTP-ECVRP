@@ -1,12 +1,19 @@
 // Author : Aman Agrawal(ILP completed in parts(present in the github url presented), heuristic here)
 #include <bits/stdc++.h>
+#include "rapidjson/document.h"
 #include "variables.h"
-using namespace std;
+#include "rapidjson/filereadstream.h"
 
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
+
+using namespace rapidjson;
+using namespace std;
 double distance(double x1, double y1, double x2, double y2)
 {
     return (double)sqrtl((x1 - x2) * (x1 - x2) * 1.00 + (y1 - y2) * (y1 - y2) * 1.00);
 }
+
 double randomDouble(double min, double max)
 {
     // Use the current time as a seed
@@ -29,6 +36,7 @@ int randomInt(int min, int max)
     std::uniform_int_distribution<> dis(min, max);
     return dis(gen);
 }
+
 void initialization()
 {
 
@@ -47,7 +55,8 @@ void initialization()
     mxBatteryChargingStations = randomInt(minbatteryChargingStations, maxbatteryChargingStations);
     mxBatterySwappingStations = randomInt(minbatterySwappingStations, maxbatterySwappingStations);
     mxVehicles = randomInt(minNumberOfvehicles, maxNumberOfvehicles);
-    mxCustomers = randomInt(minNumberOfCustomers, maxNumberOfCustomers);
+    // mxCustomers = randomInt(minNumberOfCustomers, maxNumberOfCustomers);
+    mxCustomers = 3;
 
     locations.resize(mxCustomers + 1);
     demandWeights.resize(mxCustomers + 1);
@@ -101,8 +110,8 @@ void initialization()
     for (int i = 1; i <= mxCustomers; i++)
     {
         demandWeights[i] = randomDouble(minCustomerDemandWeight, maxCustomerDemandWeight);
-        locations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
-        locations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
+        // locations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
+        // locations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
     }
 
     for (int i = 1; i <= mxBatteryChargingStations; i++)
@@ -190,10 +199,18 @@ void initialization()
 
     // Resizing
 }
+// void readDataFromJsonFile()
+// {
 
+// }
 signed main()
 {
-    initialization();
+    // parseJSONFileAndFillVariables();
+    for (auto i : locations)
+    {
+        cout << i.first << " " << i.second << endl;
+    }
+    // initialization();
     // Vehicle Assignment part.
     /************* Vehicle Assignment Part *************/
 
@@ -654,7 +671,7 @@ signed main()
     for (int i = 1; i <= mxVehicles; i++)
     {
         totalTimes[i] += (chargingTImes[i] + swappingTimes[i]);
-        final_ans = max(final_ans,totalTimes[i]);
+        final_ans = max(final_ans, totalTimes[i]);
 
         // if(totalTimes[i]>10.00)
         // totalTimes[i]/=(100.00);
@@ -663,27 +680,58 @@ signed main()
 
     /************* Battery Swapping Not Done *************/
 
+    ofstream outputFile("output.txt");
+
+    if (!outputFile.is_open())
+    {
+        cerr << "Failed to open the file for writing." << endl;
+        return 1;
+    }
+
     for (int i = 1; i <= mxVehicles; i++)
     {
-        cout << "Vehicle " << i << ": ";
-        for (int j = 0; j < nodeTraversor[i].size() - 1; j++)
+        outputFile << i << endl;
+        outputFile << costOfCharging[i] << endl;
+        outputFile << totalTimes[i] << endl;
+        for (int j = 1; j < nodeTraversor[i].size() - 1; j++)
         {
             int x = nodeTraversor[i][j];
             int y = x / 1e5;
-            if(y<0)
+            if (y < 0)
             {
-                cout<<"Bat-swap(" << -1*y << ") ->";
+                outputFile << batterySwappingStations[-y].first << endl;
+                outputFile << batterySwappingStations[-y].second << endl;
+                outputFile << 0 << endl;
+                outputFile << 1 << endl;
+                cout << "Bat-swap(" << -1 * y << ") ->";
             }
-            else if(y != 0)
+            else if (y != 0)
+            {
+                outputFile << batteryChargingStations[y].first << endl;
+                outputFile << batteryChargingStations[y].second << endl;
+                outputFile << 1 << endl;
+                outputFile << 0 << endl;
                 cout << " Ch-st(" << y << ") -> ";
+            }
             else
+            {
+                outputFile << locations[x].first << endl;
+                outputFile << locations[x].second << endl;
+                outputFile << 0 << endl;
+                outputFile << 0 << endl;
                 cout << x << " -> ";
+            }
         }
-        cout << "0" << endl;
+        outputFile << "End" << endl;
+        // cout << "0" << endl;
         cout << "Total cost incurred: " << costOfCharging[i] << endl;
         cout << "Total time taken: " << totalTimes[i] << endl;
         cout << endl;
     }
-    cout<<"FINAL ANSWER: MAXIMUM TOTAL TIME: " << final_ans<<endl<<endl<<endl;
+    outputFile.close();
+    readTextData();
+    cout << "FINAL ANSWER: MAXIMUM TOTAL TIME: " << final_ans << endl
+         << endl
+         << endl;
     return 0;
 }

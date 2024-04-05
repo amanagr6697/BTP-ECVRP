@@ -1,0 +1,28 @@
+{
+  "inputs": [
+    {
+      "id": 1,
+      "latitude": 25.5407948,
+      "longitude": 84.8508487,
+      "text": "Current Location"
+    },
+    {
+      "id": 0.7202443449939367,
+      "latitude": 25.5377937,
+      "longitude": 84.8487145,
+      "text": "Asima Girls Hostel, Road, Dilawarpur, Bihar, India"
+    },
+    {
+      "id": 0.6881549001836926,
+      "latitude": 25.5497607,
+      "longitude": 84.8536771,
+      "text": "Hospital, IIT Patna, Bihta-Lai Road, Dumri, Bihar, India"
+    },
+    {
+      "id": 0.13085695077638043,
+      "latitude": 25.5325076,
+      "longitude": 84.8519072,
+      "text": "Tutorial Block- 9, IITP, Tutorial Block, IIT Main Road, Bihta, Bihar, India"
+    }
+  ]
+}
