@@ -1,64 +1,48 @@
 1
-2930.2
-18.1805
-21
-20
+0
+0.0195771
+25.5408
+84.8507
+Current Location
 0
 0
-8
-18
+25.5388
+84.859
+Panache Inn, near IIT Main gate, Bihta, Bihar, India
 0
 0
-24
-29
-1
-0
-30
-20
+25.5408
+84.8507
+Current Location
 0
 0
 End
 2
-1902.6
-13.3067
-20
-15
+2857.7
+12.1023
+25.5408
+84.8507
+Current Location
 0
 0
-14
-18
+25.5547
+84.8575
+IIT Patna Gate No. 2, IIT Main Road, Dayalpur Daulatpur, Bihar, India
+0
+0
+25.6186
+85.08
+Panache, Sector 2, Ashiana Nagar Phase 1, Rukanpura, Patna, Bihar, India
 1
 0
-10
-25
+25.6145
+85.1437
+Lemon Tree Premier, Patna, Exhibition Road, near Gandhi Maidan Road, South Gandhi Maidan, Raja Ji Salai, Indira Nagar, Patna, Bihar, India
 0
 0
-End
-3
-0
-1.68646
-22
-28
-0
-0
-15
-10
-0
-0
-16
-13
-0
-0
-End
-4
-0
-2.62023
-15
-30
-0
-0
-25
-5
+25.5408
+84.8507
+Current Location
 0
 0
 End

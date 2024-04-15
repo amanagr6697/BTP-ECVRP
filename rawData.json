@@ -1,0 +1,93 @@
+{
+    "location": [
+      {
+        "id": 1,
+        "latitude": 25.5408086,
+        "longitude": 84.8507485,
+        "text": "Current Location"
+      },
+      {
+        "id": 0.8419127557253124,
+        "latitude": 25.5388187,
+        "longitude": 84.8589935,
+        "text": "Panache Inn, near IIT Main gate, Bihta, Bihar, India",
+        "demandWeight": 13
+      },
+      {
+        "id": 0.5486304183570472,
+        "latitude": 25.6144895,
+        "longitude": 85.143739,
+        "text": "Lemon Tree Premier, Patna, Exhibition Road, near Gandhi Maidan Road, South Gandhi Maidan, Raja Ji Salai, Indira Nagar, Patna, Bihar, India",
+        "demandWeight": 18
+      },
+      {
+        "id": 0.27533093983552115,
+        "latitude": 25.5547194,
+        "longitude": 84.8574687,
+        "text": "IIT Patna Gate No. 2, IIT Main Road, Dayalpur Daulatpur, Bihar, India",
+        "demandWeight": 20
+      }
+    ],
+    "batterychargingstation": [
+      {
+        "id": 0.31692220829005313,
+        "latitude": 25.6241415,
+        "longitude": 85.0414249,
+        "text": "Danapur, Bihar, India"
+      },
+      {
+        "id": 0.46013110515057626,
+        "latitude": 25.6186248,
+        "longitude": 85.0799724,
+        "text": "Panache, Sector 2, Ashiana Nagar Phase 1, Rukanpura, Patna, Bihar, India"
+      }
+    ],
+    "batteryswappingstation": [
+      {
+        "id": 0.5144973694277515,
+        "latitude": 25.5819394,
+        "longitude": 84.8348578,
+        "text": "NIT Patna Bihta Campus, Kateshar, Bihar, India"
+      }
+    ],
+    "vehicle": [
+      {
+        "id": 0.17586361880652024,
+        "mxBatteryLevels": 10000,
+        "mxCostAllowed": 45,
+        "mxWeightAllowed": 20,
+        "speedOfVehicles": 10,
+        "weightFactorForSpeed": 0.15,
+        "weightFactorForDistance": 0.03
+      },
+      {
+        "id": 0.7913088052046358,
+        "mxBatteryLevels": 10000,
+        "mxCostAllowed": 60,
+        "mxWeightAllowed": 20,
+        "speedOfVehicles": 60,
+        "weightFactorForSpeed": 0.01,
+        "weightFactorForDistance": 0.01
+      }
+    ],
+    "fastChargingTimePerUnitOfCharge": 0.005,
+    "mediumChargingTimePerUnitOfCharge": 0.008,
+    "slowChargingTimePerUnitOfCharge": 0.013,
+    "batterySwappingCost": 30,
+    "batterySwappingTime": 0.2,
+    "mxVehicles": 2,
+    "mxCustomers": 3,
+    "dischargingConst": 10,
+    "temperature": 300,
+    "scalingFactor": 0.03,
+    "parameter": 0.5,
+    "fastTimeChargers": 2,
+    "mediumTimeChargers": 2,
+    "slowTimeChargers": 4,
+    "costPerUnitChargeOfFast": 3,
+    "costPerUnitChargeOfMedium": 1.4,
+    "costPerUnitChargeOfSlow": 0.9,
+    "mxBatteryChargingStations": 2,
+    "mxBatterySwappingStations": 1
+  }
+  

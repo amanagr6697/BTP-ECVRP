@@ -24,7 +24,6 @@ TSP::TSP(string in, string out){
 		cities.push_back(newCity);
 	}
 	count--;
-	cout << "cities created" << endl;
 	inStream.close();
 
 	//Initialize member variables
@@ -310,34 +309,34 @@ void TSP::printResult(){
 };
 
 void TSP::printPath(){
-  cout << endl;
-  for (vector<long long int>::iterator it = circuit.begin(); it != circuit.end()-1; ++it) {
-    cout << *it << " to " << *(it+1) << " ";
-    cout << graph[*it][*(it+1)] << endl;
-  }
-  cout << *(circuit.end()-1) << " to " << circuit.front();
-  cout << "\nLength: " << pathLength << endl << endl;
+//   cout << endl;
+//   for (vector<long long int>::iterator it = circuit.begin(); it != circuit.end()-1; ++it) {
+//     // cout << *it << " to " << *(it+1) << " ";
+//     cout << graph[*it][*(it+1)] << endl;
+//   }
+//   cout << *(circuit.end()-1) << " to " << circuit.front();
+//   cout << "\nLength: " << pathLength << endl << endl;
 };
 
 void TSP::printEuler() {
-  for (vector<long long int>::iterator it = circuit.begin(); it != circuit.end(); ++it)
-    cout << *it << endl;
+//   for (vector<long long int>::iterator it = circuit.begin(); it != circuit.end(); ++it)
+//     cout << *it << endl;
 }
 
 void TSP::printAdjList() {
-  for (long long int i = 0; i < n; i++) {
-    cout << i << ": "; //print which vertex's edge list follows
-    for (long long int j = 0; j < (long long int)adjlist[i].size(); j++) {
-      cout << adjlist[i][j] << " "; //print each item in edge list
-    }
-    cout << endl;
-  }
+//   for (long long int i = 0; i < n; i++) {
+//     cout << i << ": "; //print which vertex's edge list follows
+//     for (long long int j = 0; j < (long long int)adjlist[i].size(); j++) {
+//       cout << adjlist[i][j] << " "; //print each item in edge list
+//     }
+//     cout << endl;
+//   }
 };
 
 void TSP::printCities(){
   cout << endl;
-  long long int i = 0;
-  for (vector<City>::iterator it = cities.begin(); it != cities.end(); ++it)
-    cout << i++ << ":  " << it->x << " " << it->y << endl;
+//   long long int i = 0;
+//   for (vector<City>::iterator it = cities.begin(); it != cities.end(); ++it)
+//     cout << i++ << ":  " << it->x << " " << it->y << endl;
 }
 

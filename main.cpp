@@ -15,22 +15,16 @@ int main(int argc, char** argv) {
 
 	// Create new tsp object
 	TSP tsp(input, output);
-	cout << "tsp created" << endl;
 	long long int tsp_size = tsp.get_size();
 
 	// Fill N x N matrix with distances between nodes
-	cout << "Fillmatrix started" << endl;
 	tsp.fillMatrix();
-	cout << "Filled Matrix" << endl;
 
 	// Find a MST T in graph G
 	tsp.findMST();
-	cout << "MST created" << endl;
 
 	// Find a minimum weighted matching M for odd vertices in T
 	tsp.perfectMatching();
-	cout << "Matching completed" << endl;
-
 	// Loop through each index and find shortest path
 	long long int best = INT_MAX;
 	long long int bestIndex;

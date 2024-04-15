@@ -93,9 +93,12 @@ std::vector<double> weightFactorForDistance = {0, 0.13, 0.17, 0.09, 0.03};
 int mxBatteryChargingStations = 12;
 int mxBatterySwappingStations = 5;
 
+std::vector<string> locationsText(mxCustomers + 1, "");
+std::vector<string> batteryChargingStationsText(mxBatteryChargingStations + 1, "");
+std::vector<string> batterySwappingStationsText(mxBatterySwappingStations + 1, "");
+
 void parseJSONFileAndFillVariables()
 {
-    cout << "AMAN" << endl;
     string filename = "data.json";
 
     ifstream file(filename);
@@ -116,35 +119,113 @@ void parseJSONFileAndFillVariables()
         return;
     }
 
-    if (!document.HasMember("inputs") || !document["inputs"].IsArray())
+    if (document.HasMember("location") && document["location"].IsArray())
     {
-        cerr << "Invalid JSON structure." << endl;
-        return;
+        const Value &locArray = document["location"];
+        for (SizeType i = 0; i < locArray.Size(); i++)
+        {
+            const Value &loc = locArray[i];
+            if (loc.HasMember("latitude") && loc.HasMember("longitude") &&
+                loc["latitude"].IsDouble() && loc["longitude"].IsDouble())
+            {
+                double latitude = loc["latitude"].GetDouble();
+                double longitude = loc["longitude"].GetDouble();
+                locations[i].first = latitude;
+                locations[i].second = longitude;
+                locationsText[i] = loc["text"].GetString();
+            }
+            else
+            {
+                cerr << "Invalid location data at index " << i << endl;
+            }
+            if (i != 0 and loc.HasMember("demandWeight"))
+            {
+                demandWeights[i] = loc["demandWeight"].GetDouble();
+            }
+        }
     }
 
-    const Value &inputs = document["inputs"];
-
-    for (SizeType i = 0; i < inputs.Size(); i++)
+    if (document.HasMember("batteryswappingstation") && document["batteryswappingstation"].IsArray())
     {
-        const Value &input = inputs[i];
-        if (input.HasMember("latitude") && input.HasMember("longitude") &&
-            input["latitude"].IsDouble() && input["longitude"].IsDouble())
+        const Value &locArray = document["batteryswappingstation"];
+        for (SizeType i = 0; i < locArray.Size(); i++)
         {
-            double latitude = input["latitude"].GetDouble();
-            double longitude = input["longitude"].GetDouble();
-            locations[i].first = latitude;
-            locations[i].second = longitude;
+            const Value &loc = locArray[i];
+            if (loc.HasMember("latitude") && loc.HasMember("longitude") &&
+                loc["latitude"].IsDouble() && loc["longitude"].IsDouble())
+            {
+                double latitude = loc["latitude"].GetDouble();
+                double longitude = loc["longitude"].GetDouble();
+                batterySwappingStations[i].first = latitude;
+                batterySwappingStations[i].second = longitude;
+                batterySwappingStationsText[i] = loc["text"].GetString();
+            }
+            else
+            {
+                cerr << "Invalid location data at index " << i << endl;
+            }
         }
-        else
+    }
+    if (document.HasMember("batterychargingstation") && document["batterychargingstation"].IsArray())
+    {
+        const Value &locArray = document["batterychargingstation"];
+        for (SizeType i = 0; i < locArray.Size(); i++)
         {
-            cerr << "Invalid input data at index " << i << endl;
+            const Value &loc = locArray[i];
+            if (loc.HasMember("latitude") && loc.HasMember("longitude") &&
+                loc["latitude"].IsDouble() && loc["longitude"].IsDouble())
+            {
+                double latitude = loc["latitude"].GetDouble();
+                double longitude = loc["longitude"].GetDouble();
+                batteryChargingStations[i].first = latitude;
+                batteryChargingStations[i].second = longitude;
+                batteryChargingStationsText[i] = loc["text"].GetString();
+            }
+            else
+            {
+                cerr << "Invalid location data at index " << i << endl;
+            }
+        }
+    }
+    mxBatteryChargingStations = document["mxBatteryChargingStations"].GetInt();
+    mxBatterySwappingStations = document["mxBatterySwappingStations"].GetInt();
+    mxVehicles = document["mxVehicles"].GetInt();
+    fastTimeChargers = document["fastTimeChargers"].GetInt();
+    slowTimeChargers = document["slowTimeChargers"].GetInt();
+    mediumTimeChargers = document["mediumTimeChargers"].GetInt();
+    mxCustomers = document["mxCustomers"].GetInt();
+    costPerUnitChargeOfFast = document["costPerUnitChargeOfFast"].GetDouble();
+    costPerUnitChargeOfMedium = document["costPerUnitChargeOfMedium"].GetDouble();
+    costPerUnitChargeOfSlow = document["costPerUnitChargeOfSlow"].GetDouble();
+    batterySwappingCost = document["batterySwappingCost"].GetDouble();
+    batterySwappingTime = document["batterySwappingTime"].GetDouble();
+
+    if (document.HasMember("vehicle") && document["vehicle"].IsArray())
+    {
+        const Value &locArray = document["vehicle"];
+        for (SizeType i = 0; i < locArray.Size(); i++)
+        {
+            const Value &loc = locArray[i];
+            if (loc.HasMember("mxBatteryLevels") && loc.HasMember("mxCostAllowed") && loc.HasMember("mxWeightAllowed") && loc.HasMember("speedOfVehicles"))
+            {
+                speedOfVehicles[i] = loc["speedOfVehicles"].GetDouble();
+                mxWeightAllowed[i] = loc["mxWeightAllowed"].GetDouble();
+                mxCostAllowed[i] = loc["mxCostAllowed"].GetDouble();
+                mxBatteryLevels[i] = loc["mxBatteryLevels"].GetDouble();
+            }
+            else
+            {
+                cerr << "Invalid data " << i << endl;
+            }
         }
     }
 }
 
-void writeJSONToFile(const std::string &filename, const rapidjson::Document &document) {
+void writeJSONToFile(const std::string &filename, const rapidjson::Document &document)
+{
     std::ofstream file(filename);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         std::cerr << "Failed to open file for writing: " << filename << std::endl;
         return;
     }
@@ -154,7 +235,8 @@ void writeJSONToFile(const std::string &filename, const rapidjson::Document &doc
     document.Accept(writer);
 }
 
-void readTextData() {
+void readTextData()
+{
     rapidjson::Document document(rapidjson::kObjectType);
 
     std::ifstream infile("output.txt");
@@ -162,8 +244,10 @@ void readTextData() {
     std::string line;
     rapidjson::Value vehicles(rapidjson::kArrayType);
 
-    while (getline(infile, line)) {
-        if (line == "End") {
+    while (getline(infile, line))
+    {
+        if (line == "End")
+        {
             continue; // Skip "End" lines
         }
 
@@ -182,12 +266,17 @@ void readTextData() {
 
         rapidjson::Value nodes(rapidjson::kArrayType);
 
-        while (getline(infile, line) && line != "End") {
+        while (getline(infile, line) && line != "End")
+        {
             rapidjson::Value node(rapidjson::kObjectType);
             node.AddMember("Latitude", std::stod(line), document.GetAllocator());
 
             getline(infile, line); // Read next line for longitude
             node.AddMember("Longitude", std::stod(line), document.GetAllocator());
+
+            getline(infile, line); // Read next line for longitude
+            Value textValue(line.c_str(), document.GetAllocator()); // Convert to Value
+            node.AddMember("text", textValue, document.GetAllocator());
 
             getline(infile, line); // Read next line for ChStation
             bool chStation = line == "1";

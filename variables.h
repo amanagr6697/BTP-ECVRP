@@ -2,6 +2,7 @@
 #define VARIABLES_H
 
 #include <vector>
+#include<string>
 #include <utility>
 
 extern std::vector<std::pair<double, double>> locations;
@@ -33,6 +34,9 @@ extern double costPerUnitChargeOfSlow;
 extern std::vector<double> speedOfVehicles;
 extern std::vector<double> weightFactorForSpeed;
 extern std::vector<double> weightFactorForDistance;
+extern std::vector<std::string> locationsText;
+extern std::vector<std::string> batteryChargingStationsText;
+extern std::vector<std::string> batterySwappingStationsText;
 void parseJSONFileAndFillVariables();
 void readTextData();
 void writeJSONToFile();
