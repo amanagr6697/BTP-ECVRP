@@ -1,48 +1,48 @@
 1
 0
-0.0195771
-25.5408
-84.8507
-Current Location
+1.50677
+28.6692
+77.4538
+Ghaziabad, Uttar Pradesh, India
 0
 0
-25.5388
-84.859
-Panache Inn, near IIT Main gate, Bihta, Bihar, India
+28.6364
+77.2928
+Preet Vihar, Delhi, India
 0
 0
-25.5408
-84.8507
-Current Location
+28.4089
+77.3178
+Faridabad, Haryana, India
+0
+0
+28.4595
+77.0266
+Gurgaon, Haryana, India
+0
+0
+28.6692
+77.4538
+Ghaziabad, Uttar Pradesh, India
 0
 0
 End
 2
-2857.7
-12.1023
-25.5408
-84.8507
-Current Location
+0
+3.21063
+28.6692
+77.4538
+Ghaziabad, Uttar Pradesh, India
 0
 0
-25.5547
-84.8575
-IIT Patna Gate No. 2, IIT Main Road, Dayalpur Daulatpur, Bihar, India
+28.6275
+77.2429
+ITO Delhi, IP Estate, New Delhi, Delhi, India
 0
 0
-25.6186
-85.08
-Panache, Sector 2, Ashiana Nagar Phase 1, Rukanpura, Patna, Bihar, India
-1
-0
-25.6145
-85.1437
-Lemon Tree Premier, Patna, Exhibition Road, near Gandhi Maidan Road, South Gandhi Maidan, Raja Ji Salai, Indira Nagar, Patna, Bihar, India
-0
-0
-25.5408
-84.8507
-Current Location
+28.6692
+77.4538
+Ghaziabad, Uttar Pradesh, India
 0
 0
 End

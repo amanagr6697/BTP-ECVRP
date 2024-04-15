@@ -22,7 +22,7 @@ const server = http.createServer((req, res) => {
           res.end();
           return;
         }
-        fs.writeFile('output.json', stdout, err => {
+        fs.writeFile('aloo.json', stdout, err => {
           if (err) throw err;
           console.log('Output saved to output.json');
           setTimeout(() => {

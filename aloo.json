@@ -1,0 +1,21 @@
+ FILLED 35 MAX_WEIGHT 80
+ FILLED 10 MAX_WEIGHT 50
+Final length: 6888
+Final length: 2150
+Charge required: 1292.2Vehicle required 1
+10000
+Charge required: 808.439Vehicle required 2
+1910
+Mxvehicles2
+Mxvehicles2
+Mxvehicles2
+Mxvehicles2
+0 -> 2 -> 4 -> 3 -> 0 -> Total cost incurred: 0
+Total time taken: 1.50677
+
+0 -> 1 -> 0 -> Total cost incurred: 0
+Total time taken: 3.21063
+
+FINAL ANSWER: MAXIMUM TOTAL TIME: 3.21063
+
+
