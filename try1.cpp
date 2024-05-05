@@ -22,30 +22,30 @@ double toRadians(double degrees)
 // Calculate the Haversine distance between two points given their latitude and longitude in degrees
 double distance(double lat1, double lon1, double lat2, double lon2)
 {
-    double dLat = toRadians(lat2 - lat1);
-    double dLon = toRadians(lon2 - lon1);
-    lat1 = toRadians(lat1);
-    lat2 = toRadians(lat2);
+    // double dLat = toRadians(lat2 - lat1);
+    // double dLon = toRadians(lon2 - lon1);
+    // lat1 = toRadians(lat1);
+    // lat2 = toRadians(lat2);
 
-    double a = sin(dLat / 2) * sin(dLat / 2) +
-               sin(dLon / 2) * sin(dLon / 2) * cos(lat1) * cos(lat2);
-    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    // double a = sin(dLat / 2) * sin(dLat / 2) +
+    //            sin(dLon / 2) * sin(dLon / 2) * cos(lat1) * cos(lat2);
+    // double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
-    // if(whichDistanceToUse)
-    return (earthRadiusKm*c);
-    // return (double)sqrtl((lat1 - lat2) * (lat1 - lat2) * 1.00 + (lon1 - lon2) * (lon1 - lon2) * 1.00);
+    // // if(whichDistanceToUse)
+    // return (earthRadiusKm*c);
+    return (double)sqrtl((lat1 - lat2) * (lat1 - lat2) * 1.00 + (lon1 - lon2) * (lon1 - lon2) * 1.00);
 }
 
 double randomDouble(double min, double max)
 {
     // Use the current time as a seed
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::mt19937 gen(seed);
-    std::uniform_real_distribution<> dis(min, max);
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    mt19937 gen(seed);
+    uniform_real_distribution<> dis(min, max);
     double result = dis(gen);
 
-    std::stringstream ss;
-    ss << std::fixed << std::setprecision(4) << result;
+    stringstream ss;
+    ss << fixed << setprecision(4) << result;
     ss >> result;
     return result;
 }
@@ -53,32 +53,30 @@ double randomDouble(double min, double max)
 int randomInt(int min, int max)
 {
     // Use the current time as a seed
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::mt19937 gen(seed);
-    std::uniform_int_distribution<> dis(min, max);
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    mt19937 gen(seed);
+    uniform_int_distribution<> dis(min, max);
     return dis(gen);
 }
 
 void initialization()
 {
+    int minNumberOfCustomers = 60;
+    int maxNumberOfCustomers = 100;
 
-    int minNumberOfCustomers = 10;
-    int maxNumberOfCustomers = 40;
+    int minbatteryChargingStations = 50;
+    int maxbatteryChargingStations = 95;
 
-    int minbatteryChargingStations = 10;
-    int maxbatteryChargingStations = 25;
+    int minbatterySwappingStations = 45;
+    int maxbatterySwappingStations = 80;
 
-    int minbatterySwappingStations = 5;
-    int maxbatterySwappingStations = 15;
-
-    int minNumberOfvehicles = 4;
-    int maxNumberOfvehicles = 7;
+    int minNumberOfvehicles = 15;
+    int maxNumberOfvehicles = 35;
 
     mxBatteryChargingStations = randomInt(minbatteryChargingStations, maxbatteryChargingStations);
     mxBatterySwappingStations = randomInt(minbatterySwappingStations, maxbatterySwappingStations);
     mxVehicles = randomInt(minNumberOfvehicles, maxNumberOfvehicles);
-    // mxCustomers = randomInt(minNumberOfCustomers, maxNumberOfCustomers);
-    mxCustomers = 3;
+    mxCustomers = randomInt(minNumberOfCustomers, maxNumberOfCustomers);
 
     locations.resize(mxCustomers + 1);
     demandWeights.resize(mxCustomers + 1);
@@ -91,15 +89,15 @@ void initialization()
     weightFactorForSpeed.resize(mxVehicles + 1);
     mxWeightAllowed.resize(mxVehicles + 1);
 
-    double minWeightLoadForvehicle = 50;
-    double maxWeightLoadForvehicle = 90;
+    double minWeightLoadForvehicle = 40;
+    double maxWeightLoadForvehicle = 150;
 
     // double max allowed vehicle cost
     double mincostAllowedForvehicle = 2000;
-    double maxcostAllowedForvehicle = 4500;
+    double maxcostAllowedForvehicle = 9000;
 
-    double minChargeLimit = 1500;
-    double maxChargeLimit = 2500;
+    double minChargeLimit = 15000;
+    double maxChargeLimit = 25000;
 
     double minSpeedForvehicle = 8;
     double maxSpeedForvehicle = 20;
@@ -110,7 +108,7 @@ void initialization()
     double minWeightFactorForDistance = 0.01;
     double maxWeightFactorForDistance = 0.15;
 
-    double minCustomerDemandWeight = 13;
+    double minCustomerDemandWeight = 15;
     double maxCustomerDemandWeight = 29;
 
     double minXCoordinate = 10;
@@ -132,8 +130,8 @@ void initialization()
     for (int i = 1; i <= mxCustomers; i++)
     {
         demandWeights[i] = randomDouble(minCustomerDemandWeight, maxCustomerDemandWeight);
-        // locations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
-        // locations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
+        locations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
+        locations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
     }
 
     for (int i = 1; i <= mxBatteryChargingStations; i++)
@@ -148,14 +146,14 @@ void initialization()
         batterySwappingStations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
     }
 
-    double minFastChargerCostPerUnitOfCharge = 2.5;
-    double maxFastCHargerCostPerUnitOfCharge = 3.8;
+    double minFastChargerCostPerUnitOfCharge = 0.4;
+    double maxFastCHargerCostPerUnitOfCharge = 0.6;
 
-    double minSlowChargerCostPerUnitOfCharge = 0.8;
-    double maxSlowChargerCostPerUnitOfCharge = 1.1;
+    double minSlowChargerCostPerUnitOfCharge = 0.1;
+    double maxSlowChargerCostPerUnitOfCharge = 0.18;
 
-    double minMediumChargerCostPerUnitOfCharge = 1.4;
-    double maxMediumChargerCostPerUnitOfCharge = 1.9;
+    double minMediumChargerCostPerUnitOfCharge = 0.22;
+    double maxMediumChargerCostPerUnitOfCharge = 0.32;
 
     double minBatterySwappingCost = 28;
     double maxBatterySwappingCost = 45;
@@ -218,13 +216,10 @@ void initialization()
     double maxParameterValue = 0.5;
 
     parameter = randomDouble(minScalingFactor, maxScalingFactor);
-
-    // Resizing
 }
-std::vector<std::pair<double, std::vector<int>>> filledWeights(mxVehicles + 1);
-void randomAllocation()
+void randomAllocation(vector<pair<double, vector<int>>> &filledWeights)
 {
-    std::mt19937 gen(static_cast<unsigned int>(std::time(nullptr)));
+    mt19937 gen(static_cast<unsigned int>(time(nullptr)));
 
     // Initialize filledWeights
 
@@ -237,12 +232,12 @@ void randomAllocation()
             i.first = 0;
             i.second.clear();
         }
-        std::uniform_int_distribution<> dis(1, mxVehicles);
+        uniform_int_distribution<> dis(1, mxVehicles);
         // Distribute objects randomly into filledWeights
         for (int obj = 1; obj <= mxCustomers; ++obj)
         {
             // Generate random bucket index
-            // std::uniform_int_distribution<> dis(1, mxVehicles);
+            // uniform_int_distribution<> dis(1, mxVehicles);
             int bucketIndex = dis(gen);
 
             // Assign object to the bucket
@@ -260,7 +255,7 @@ void randomAllocation()
         }
     }
 }
-void heuristicInitialization()
+void heuristicInitialization(vector<pair<double, vector<int>>> &filledWeights)
 {
     // Weight assigning
     vector<pair<double, int>> demand;
@@ -271,6 +266,7 @@ void heuristicInitialization()
         demand.push_back({demandWeights[i], i});
         cnt++;
     }
+    cout << "count" << cnt << endl;
 
     sort(demand.begin(), demand.end(), greater<>());
 
@@ -287,7 +283,8 @@ void heuristicInitialization()
         if (counter == mxCustomers)
             break;
         auto top = allotWeights.top();
-
+        cout << "top" << top.first << endl;
+        cout << "counter first" << demand[counter].first << endl;
         if (top.first < demand[counter].first) // If maximum possible vehicle weight can't also fulfill the requirements.
         {
             cout << "Solution not possible... Exiting";
@@ -307,36 +304,131 @@ void heuristicInitialization()
             counter++;
         }
     }
+    cout<<filledWeights.size()<<"papa";
+}
+void fillVariables()
+{
+    FILE *file = fopen("data.json", "rb");
+    if (!file)
+    {
+        cerr << "Failed to open JSON file." << endl;
+        return;
+    }
+
+    // Parse JSON data
+    char readBuffer[65536];
+    FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
+    Document jsonData;
+    jsonData.ParseStream(inputStream);
+    fclose(file);
+
+    for (auto &loc : jsonData["location"].GetArray())
+    {
+        locations.push_back({loc["latitude"].GetDouble(), loc["longitude"].GetDouble()});
+        demandWeights.push_back(loc["demandWeight"].GetDouble());
+    }
+
+    batteryChargingStations.push_back({0, 0});
+    batterySwappingStations.push_back({0, 0});
+    for (auto &loc : jsonData["batterychargingstation"].GetArray())
+    {
+        batteryChargingStations.push_back({loc["latitude"].GetDouble(), loc["longitude"].GetDouble()});
+    }
+
+    for (auto &loc : jsonData["batteryswappingstation"].GetArray())
+    {
+        batterySwappingStations.push_back({loc["latitude"].GetDouble(), loc["longitude"].GetDouble()});
+    }
+    mxBatteryLevels.push_back(0);
+    mxCostAllowed.push_back(0);
+    mxWeightAllowed.push_back(0);
+
+    // vehicle arrays
+    for (auto &vehicle : jsonData["vehicle"].GetArray())
+    {
+        mxBatteryLevels.push_back(vehicle["mxBatteryLevels"].GetDouble());
+        mxCostAllowed.push_back(vehicle["mxCostAllowed"].GetDouble());
+        mxWeightAllowed.push_back(vehicle["mxWeightAllowed"].GetDouble());
+    }
+
+    // Other variables
+    fastChargingTimePerUnitOfCharge = jsonData["fastChargingTimePerUnitOfCharge"].GetDouble();
+    mediumChargingTimePerUnitOfCharge = jsonData["mediumChargingTimePerUnitOfCharge"].GetDouble();
+    slowChargingTimePerUnitOfCharge = jsonData["slowChargingTimePerUnitOfCharge"].GetDouble();
+    batterySwappingCost = jsonData["batterySwappingCost"].GetDouble();
+    batterySwappingTime = jsonData["batterySwappingTime"].GetDouble();
+    batteriesAvailable = jsonData["batteriesAvailable"].GetInt();
+    mxVehicles = jsonData["mxVehicles"].GetInt();
+    mxCustomers = jsonData["mxCustomers"].GetInt();
+    dischargingConst = jsonData["dischargingConst"].GetDouble();
+    temperature = jsonData["temperature"].GetDouble();
+    scalingFactor = jsonData["scalingFactor"].GetDouble();
+    parameter = jsonData["parameter"].GetDouble();
+    fastTimeChargers = jsonData["fastTimeChargers"].GetInt();
+    mediumTimeChargers = jsonData["mediumTimeChargers"].GetInt();
+    slowTimeChargers = jsonData["slowTimeChargers"].GetInt();
+    costPerUnitChargeOfFast = jsonData["costPerUnitChargeOfFast"].GetDouble();
+    costPerUnitChargeOfMedium = jsonData["costPerUnitChargeOfMedium"].GetDouble();
+    costPerUnitChargeOfSlow = jsonData["costPerUnitChargeOfSlow"].GetDouble();
+    mxBatteryChargingStations = jsonData["mxBatteryChargingStations"].GetInt();
+    mxBatterySwappingStations = jsonData["mxBatterySwappingStations"].GetInt();
 }
 signed main()
 {
-    parseJSONFileAndFillVariables();
-    // whichDistanceToUse = 1;
-    filledWeights.resize(mxVehicles+1);
-    locations.resize(mxCustomers + 1);
-    demandWeights.resize(mxCustomers + 1);
-    batteryChargingStations.resize(mxBatteryChargingStations + 1);
-    batterySwappingStations.resize(mxBatterySwappingStations + 1);
-    mxBatteryLevels.resize(mxVehicles + 1);
-    mxCostAllowed.resize(mxVehicles + 1);
-    speedOfVehicles.resize(mxVehicles + 1);
-    weightFactorForDistance.resize(mxVehicles + 1);
-    weightFactorForSpeed.resize(mxVehicles + 1);
-    mxWeightAllowed.resize(mxVehicles + 1);
 
-     locationsText.resize(mxCustomers+1);
-     batteryChargingStationsText.resize(mxBatteryChargingStations+1);
-     batterySwappingStationsText.resize(mxBatterySwappingStations+1);
+    // parseJSONFileAndFillVariables();
+    // // whichDistanceToUse = 1;
+    // filledWeights.resize(mxVehicles+1);
+    // locations.resize(mxCustomers + 1);
+    // demandWeights.resize(mxCustomers + 1);
+    // batteryChargingStations.resize(mxBatteryChargingStations + 1);
+    // batterySwappingStations.resize(mxBatterySwappingStations + 1);
+    // mxBatteryLevels.resize(mxVehicles + 1);
+    // mxCostAllowed.resize(mxVehicles + 1);
+    // speedOfVehicles.resize(mxVehicles + 1);
+    // weightFactorForDistance.resize(mxVehicles + 1);
+    // weightFactorForSpeed.resize(mxVehicles + 1);
+    // mxWeightAllowed.resize(mxVehicles + 1);
+    locations.clear();
+    demandWeights.clear();
+    batteryChargingStations.clear();
+    batterySwappingStations.clear();
+    mxBatteryLevels.clear();
+    mxCostAllowed.clear();
+    speedOfVehicles.clear();
+    weightFactorForDistance.clear();
+    weightFactorForSpeed.clear();
+    mxWeightAllowed.clear();
+
+    //  locationsText.resize(mxCustomers+1);
+    //  batteryChargingStationsText.resize(mxBatteryChargingStations+1);
+    //  batterySwappingStationsText.resize(mxBatterySwappingStations+1);
+    fillVariables();
+    vector<pair<double, vector<int>>> filledWeights(mxVehicles + 1);
+
+    for(auto i:mxWeightAllowed)
+    cout<<i<<"alooLelo"<<endl;
     // cout << locationsText.size() << locationsText[2] << "aman" << endl;
     // cout << batteryChargingStationsText.size() << "aman" << batteryChargingStationsText[2] << endl;
     // cout << batterySwappingStationsText.size() << "aman" << batterySwappingStationsText[2] << endl;
 
     // whichDistanceToUse = 0;
+    cout << "aman" << endl;
     // initialization();
+    cout << "amit" << endl;
+    cout << mxCustomers << endl;
+    cout << mxVehicles << endl;
+    for (auto i : demandWeights)
+        cout << i << " ";
+    cout << endl;
+    for (auto i : mxWeightAllowed)
+        cout << i << " ";
+    cout << endl;
+    heuristicInitialization(filledWeights);
     // Vehicle Assignment part.
     /************* Vehicle Assignment Part *************/
-    // randomAllocation();
-    heuristicInitialization();
+    // randomAllocation(filledWeights);
+        cout<<"Mammi"<<filledWeights.size()<<endl;
 
     for (int i = 1; i <= mxVehicles; i++)
     {
@@ -348,8 +440,15 @@ signed main()
     // string baseCommand2 = "tspNew vehicle_";
 
     vector<vector<int>> vehicleCustomerMapping(mxVehicles + 1, vector<int>(mxCustomers + 1, 0));
+        cout<<"Mammi"<<filledWeights.size()<<endl;
+ 
+    // for(auto i:filledWeights)
+    // {
+    //     cout<<i<<endl;
+    // }
     for (auto i : filledWeights)
     {
+        cout<<"Mammi"<<endl;
         if (counter == 0)
         {
             counter++;
@@ -359,19 +458,22 @@ signed main()
         ofstream outfile(fileName);
         if (!outfile.is_open())
         {
-            std::cerr << "Error: Unable to open " << fileName << " for writing\n";
+            cerr << "Error: Unable to open " << fileName << " for writing\n";
             return 1;
         }
 
         int node_num = 1;
         string command = baseCommand1 + to_string(counter) + ".txt";
+        // string command = baseCommand2 + to_string(counter) + ".txt";
 
-        outfile << 0 << " " << locations[0].first * 10000 << " " << locations[0].second * 10000 << "\n";
-
+        outfile << fixed << setprecision(0) << 0 << " "
+                << fixed << setprecision(0) << locations[0].first * 10000 << " "
+                << fixed << setprecision(0) << locations[0].second * 10000 << "\n";
         for (auto node : i.second)
         {
-            outfile << node_num << " " << locations[node].first * 10000 << " " << locations[node].second * 10000 << "\n";
-
+            outfile << fixed << setprecision(0) << 0 << " "
+                    << fixed << setprecision(0) << locations[node].first * 10000 << " "
+                    << fixed << setprecision(0) << locations[node].second * 10000 << "\n";
             vehicleCustomerMapping[counter][node_num] = node;
 
             node_num++;
@@ -398,7 +500,7 @@ signed main()
         if (!file.is_open())
         {
 
-            std::cerr << "Error opening file" << std::endl;
+            cerr << "Error opening file" << endl;
             return 1;
         }
         string line;
@@ -484,7 +586,7 @@ signed main()
         int previous_node = depo;
         cout << "Charge required: " << ch_required << "Vehicle required " << i << endl;
         cout << mxBatteryLevels[i] << endl;
-        // distanceValue =
+
         while (1)
         {
             double residualBatteryLevel = batteryLevel - 150;
@@ -616,7 +718,7 @@ signed main()
                 ch_required = (dischargingAdditive + weight * 1.0 / mxWeightAllowed[i]) * (distanceBetweenNodes * (1 + weightFactorForDistance[i] * weight));
                 batteryLevel = mxBatteryLevels[i];
                 distanceValue = distanceBetweenNodes;
-
+                cout << "Distance " << distanceValue << endl;
                 residualBatteryLevel = batteryLevel - 150;
             }
             // if (end_node == depo and counter!=0)
@@ -675,30 +777,33 @@ signed main()
     vector<double> swappingTimes(mxVehicles + 1);
 
     vector<double> costOfCharging(mxVehicles + 1);
-    cout << "Mxvehicles" << mxVehicles << endl;
+    vector<int> batteriesUsed(mxBatterySwappingStations + 1, 0);
+    vector<int> fastChargersUsed(mxBatteryChargingStations + 1, 0);
+    vector<int> mediumChargersUsed(mxBatteryChargingStations + 1, 0);
+    vector<int> slowChargersUsed(mxBatteryChargingStations + 1, 0);
+
     for (int i = 1; i <= mxVehicles; i++)
     {
         for (auto stations : chargeRequirement[i])
         {
             for (auto charge : stations)
             {
-
                 costOfCharging[i] += (charge * costPerUnitChargeOfFast);
                 chargingTImes[i] += (charge * fastChargingTimePerUnitOfCharge);
             }
         }
-
         for (auto stations : batterySwappingRequirement[i])
         {
             for (auto charge : stations)
             {
                 swappingTimes[i] += (batterySwappingTime);
+                batteriesUsed[i]++;
                 costOfCharging[i] += (batterySwappingCost);
+                fastChargersUsed[i]++;
             }
         }
     }
-    cout << "Mxvehicles" << mxVehicles << endl;
-    // Balancing cost
+
     for (int i = 1; i <= mxVehicles; i++)
     {
         priority_queue<pair<double, pair<int, int>>> chargeStorage;
@@ -707,19 +812,29 @@ signed main()
             for (int k = 0; k < chargeRequirement[i][j].size(); k++)
             {
                 chargeStorage.push({chargeRequirement[i][j][k], {j, k}});
+                // cout<<chargeRequirement[i][j][k]<<" aman "<<j<<" j "<<k<<" i "<<i<<endl;
             }
         }
 
         bool mediumOrSlow = 0; // 0 denotes for fast to medium and 1 dentoes from medium to slow
 
         map<pair<int, int>, bool> mappingForStation[mxVehicles + 1];
+        // cout << "Cost"<<i<<" i "<<costOfCharging[i]<<endl;
+        // cout << "Cost i"<<mxCostAllowed[i]<<endl;
+
         // 0 means from fast to medium and 1 means from medium to slow if for same charging station
-        while (costOfCharging[i] > mxCostAllowed[i])
+        while (costOfCharging[i] > mxCostAllowed[i] or fastChargersUsed[i] > fastTimeChargers)
         {
+            // cout << "Cost"<<costOfCharging[i]<<endl;
             double extra = (costOfCharging[i] - mxCostAllowed[i]);
 
             if (chargeStorage.size() == 0)
             {
+                if (costOfCharging[i] > mxCostAllowed[i])
+                {
+                    cout << "Solution not possible with this amount for vehicle... Exiting";
+                    return 0;
+                }
                 break;
             }
             auto top = chargeStorage.top();
@@ -737,11 +852,13 @@ signed main()
             costOfCharging[i] -= cost_saved;
 
             mappingForStation[i][top.second] = 1;
+            if (mappingForStation[i][top.second])
+
+                fastChargersUsed[i]--;
         }
     }
 
     /************* Cost Optimisation Also Done ****************/
-    cout << "Mxvehicles" << mxVehicles << endl;
     double final_ans = 0.0;
     for (int i = 1; i <= mxVehicles; i++)
     {
@@ -754,7 +871,6 @@ signed main()
     // sort(totalTimes.begin(), totalTimes.end(), greater<>());
 
     /************* Battery Swapping Not Done *************/
-    cout << "Mxvehicles" << mxVehicles << endl;
 
     ofstream outputFile("output.txt");
 

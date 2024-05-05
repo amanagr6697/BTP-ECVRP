@@ -1,0 +1,106 @@
+{
+  "location": [
+    {
+      "latitude": 23,
+      "longitude": 27,
+      "text": "Raj Nagar Extension, Ghaziabad, Uttar Pradesh, India",
+      "demandWeight": 0
+    },
+    {
+      "latitude": 20,
+      "longitude": 15,
+      "text": "Indirapuram, Ghaziabad, Uttar Pradesh, India",
+      "demandWeight": 15
+    },
+    {
+      "latitude": 10,
+      "longitude": 25,
+      "text": "Anand Vihar Railway Station, Block D, Anand Vihar, Delhi, India",
+      "demandWeight": 20
+    },
+    {
+      "latitude": 15,
+      "longitude": 10,
+      "text": "Meerut, Uttar Pradesh, India",
+      "demandWeight": 20
+    },
+    {
+      "latitude": 30,
+      "longitude": 20,
+      "text": "New Delhi, Delhi, India",
+      "demandWeight": 15
+    }
+  ],
+  "batterychargingstation": [
+    {
+      "latitude": 13,
+      "longitude": 12,
+      "text": "Raj Nagar, Ghaziabad, Uttar Pradesh, India"
+    },
+    {
+      "latitude": 8,
+      "longitude": 19,
+      "text": "Partapur, Meerut, Uttar Pradesh, India"
+    },
+    {
+      "latitude": 14,
+      "longitude": 18,
+      "text": "IGI Airport Terminal 3 Metro Station, Delhi"
+    }
+  ],
+  "batteryswappingstation": [
+    {
+      "latitude": 29,
+      "longitude": 13,
+      "text": "Vaishali metro station, Sector 4, Vaishali, Metro, Ghaziabad, Uttar Pradesh, India"
+    },
+    {
+      "latitude": 15,
+      "longitude": 11,
+      "text": "RKGITM, Meerut Road, Raj Nagar Extension, Ghaziabad, Uttar Pradesh, India"
+    },
+    {
+      "latitude": 18,
+      "longitude": 7,
+      "text": "Modinagar, Uttar Pradesh, India"
+    }
+  ],
+  "vehicle": [
+    {
+      "mxBatteryLevels": 500,
+      "mxCostAllowed": 100,
+      "mxWeightAllowed": 50,
+      "speedOfVehicles": 100,
+      "weightFactorForSpeed": 0.05,
+      "weightFactorForDistance": 0.13
+    },
+    {
+      "mxBatteryLevels": 300,
+      "mxCostAllowed": 100,
+      "mxWeightAllowed": 50,
+      "speedOfVehicles": 100,
+      "weightFactorForSpeed": 0.05,
+      "weightFactorForDistance": 0.13
+    }
+  ],
+  "fastChargingTimePerUnitOfCharge": 0.005,
+  "mediumChargingTimePerUnitOfCharge": 0.008,
+  "slowChargingTimePerUnitOfCharge": 0.013,
+  "batterySwappingCost": 30,
+  "batterySwappingTime": 0.2,
+  "mxVehicles": 2,
+  "mxCustomers": 4,
+  "dischargingConst": 10,
+  "temperature": 300,
+  "scalingFactor": 0.03,
+  "parameter": 0.5,
+  "fastTimeChargers": 2,
+  "mediumTimeChargers": 2,
+  "slowTimeChargers": 4,
+  "batteriesAvailable": 3,
+  "costPerUnitChargeOfFast": 3,
+  "costPerUnitChargeOfMedium": 1.4,
+  "costPerUnitChargeOfSlow": 0.9,
+  "mxBatteryChargingStations": 3,
+  "mxBatterySwappingStations": 3
+}

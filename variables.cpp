@@ -27,7 +27,7 @@ std::vector<double> demandWeights = {0, 20, 12, 28, 18, 15, 25, 13, 17, 30, 10};
 
 std::vector<double> mxBatteryLevels = {0, 2200, 1910, 2020, 1340}; // in wh
 
-std::vector<double> mxCostAllowed = {0, 4500, 2000, 400, 1200}; // in rs
+std::vector<double> mxCostAllowed = {0, 8400, 4000, 400, 1200}; // in rs
 
 std::vector<double> mxWeightAllowed = {0, 80, 50, 70, 60}; // in kg
 
@@ -37,7 +37,7 @@ double mediumChargingTimePerUnitOfCharge = 0.008; // in hours/wh
 
 double slowChargingTimePerUnitOfCharge = 0.013; // in hours/wh
 
-double batterySwappingCost = 30; // in rs
+double batterySwappingCost = 40; // in rs
 
 double batterySwappingTime = 0.2; // in hours
 
@@ -79,10 +79,10 @@ int fastTimeChargers = 2;
 int mediumTimeChargers = 2;
 
 int slowTimeChargers = 4;
-
-double costPerUnitChargeOfFast = 3; // in rs/wh
-double costPerUnitChargeOfMedium = 1.4;
-double costPerUnitChargeOfSlow = 0.9;
+int batteriesAvailable = 2;
+double costPerUnitChargeOfFast = 0.4; // in rs/wh
+double costPerUnitChargeOfMedium = 0.25;
+double costPerUnitChargeOfSlow = 0.15;
 
 std::vector<double> speedOfVehicles = {0, 12, 9, 13, 17};
 

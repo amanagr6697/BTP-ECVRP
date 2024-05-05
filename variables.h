@@ -28,6 +28,7 @@ extern double parameter;
 extern int fastTimeChargers;
 extern int mediumTimeChargers;
 extern int slowTimeChargers;
+extern int batteriesAvailable;
 extern double costPerUnitChargeOfFast;
 extern double costPerUnitChargeOfMedium;
 extern double costPerUnitChargeOfSlow;

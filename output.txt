@@ -1,48 +1,28 @@
 1
 0
-1.50677
-28.6692
-77.4538
-Ghaziabad, Uttar Pradesh, India
+0
+23
+27
+
 0
 0
-28.6364
-77.2928
-Preet Vihar, Delhi, India
-0
-0
-28.4089
-77.3178
-Faridabad, Haryana, India
-0
-0
-28.4595
-77.0266
-Gurgaon, Haryana, India
-0
-0
-28.6692
-77.4538
-Ghaziabad, Uttar Pradesh, India
+23
+27
+
 0
 0
 End
 2
 0
-3.21063
-28.6692
-77.4538
-Ghaziabad, Uttar Pradesh, India
+0
+23
+27
+
 0
 0
-28.6275
-77.2429
-ITO Delhi, IP Estate, New Delhi, Delhi, India
-0
-0
-28.6692
-77.4538
-Ghaziabad, Uttar Pradesh, India
+23
+27
+
 0
 0
 End
