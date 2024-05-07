@@ -81,6 +81,14 @@
       "speedOfVehicles": 100,
       "weightFactorForSpeed": 0.05,
       "weightFactorForDistance": 0.13
+    },
+    {
+      "mxBatteryLevels": 300,
+      "mxCostAllowed": 100,
+      "mxWeightAllowed": 50,
+      "speedOfVehicles": 100,
+      "weightFactorForSpeed": 0.05,
+      "weightFactorForDistance": 0.13
     }
   ],
   "fastChargingTimePerUnitOfCharge": 0.005,
