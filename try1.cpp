@@ -31,9 +31,9 @@ double distance(double lat1, double lon1, double lat2, double lon2)
                sin(dLon / 2) * sin(dLon / 2) * cos(lat1) * cos(lat2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
-    // if(whichDistanceToUse)
+
     return (earthRadiusKm*c);
-    // return (double)sqrtl((lat1 - lat2) * (lat1 - lat2) * 1.00 + (lon1 - lon2) * (lon1 - lon2) * 1.00);
+
 }
 
 double randomDouble(double min, double max)
@@ -77,7 +77,7 @@ void initialization()
     mxBatteryChargingStations = randomInt(minbatteryChargingStations, maxbatteryChargingStations);
     mxBatterySwappingStations = randomInt(minbatterySwappingStations, maxbatterySwappingStations);
     mxVehicles = randomInt(minNumberOfvehicles, maxNumberOfvehicles);
-    // mxCustomers = randomInt(minNumberOfCustomers, maxNumberOfCustomers);
+
     mxCustomers = 3;
 
     locations.resize(mxCustomers + 1);
@@ -132,8 +132,8 @@ void initialization()
     for (int i = 1; i <= mxCustomers; i++)
     {
         demandWeights[i] = randomDouble(minCustomerDemandWeight, maxCustomerDemandWeight);
-        // locations[i].first = randomDouble(minXCoordinate, maxXCoordinate);
-        // locations[i].second = randomDouble(minYCoordinate, maxYCoordinate);
+
+
     }
 
     for (int i = 1; i <= mxBatteryChargingStations; i++)
@@ -219,7 +219,7 @@ void initialization()
 
     parameter = randomDouble(minScalingFactor, maxScalingFactor);
 
-    // Resizing
+
 }
 std::vector<std::pair<double, std::vector<int>>> filledWeights(mxVehicles + 1);
 void randomAllocation()
@@ -242,7 +242,7 @@ void randomAllocation()
         for (int obj = 1; obj <= mxCustomers; ++obj)
         {
             // Generate random bucket index
-            // std::uniform_int_distribution<> dis(1, mxVehicles);
+
             int bucketIndex = dis(gen);
 
             // Assign object to the bucket
@@ -311,7 +311,7 @@ void heuristicInitialization()
 signed main()
 {
     parseJSONFileAndFillVariables();
-    // whichDistanceToUse = 1;
+
     filledWeights.resize(mxVehicles+1);
     locations.resize(mxCustomers + 1);
     demandWeights.resize(mxCustomers + 1);
@@ -327,11 +327,11 @@ signed main()
      locationsText.resize(mxCustomers+1);
      batteryChargingStationsText.resize(mxBatteryChargingStations+1);
      batterySwappingStationsText.resize(mxBatterySwappingStations+1);
-    // cout << locationsText.size() << locationsText[2] << "aman" << endl;
-    // cout << batteryChargingStationsText.size() << "aman" << batteryChargingStationsText[2] << endl;
-    // cout << batterySwappingStationsText.size() << "aman" << batterySwappingStationsText[2] << endl;
 
-    // whichDistanceToUse = 0;
+
+
+
+
     // initialization();
     // Vehicle Assignment part.
     /************* Vehicle Assignment Part *************/
@@ -453,7 +453,7 @@ signed main()
         int end_node = depo;
 
         double batteryLevel = mxBatteryLevels[i];
-        // nodeTraversor[i].push_back(end_node);
+
 
         double dist_1 = distance(locations[end_node].first, locations[end_node].second, locations[adjacencyMatrix[i][end_node][0]].first, locations[adjacencyMatrix[i][end_node][0]].second);
         double dist_2 = distance(locations[end_node].first, locations[end_node].second, locations[adjacencyMatrix[i][end_node][1]].first, locations[adjacencyMatrix[i][end_node][1]].second);
@@ -472,7 +472,7 @@ signed main()
         }
 
         double ch_required = 0;
-        // int node = -1;
+
 
         bool visited[mxCustomers + 1] = {0};
         int counter = 0;
@@ -484,7 +484,7 @@ signed main()
         int previous_node = depo;
         cout << "Charge required: " << ch_required << "Vehicle required " << i << endl;
         cout << mxBatteryLevels[i] << endl;
-        // distanceValue =
+
         while (1)
         {
             double residualBatteryLevel = batteryLevel - 150;
@@ -493,7 +493,7 @@ signed main()
                 residualBatteryLevel = batteryLevel;
             while (ch_required > residualBatteryLevel)
             {
-                // cout<<
+
                 if (residualBatteryLevel < 100)
                     residualBatteryLevel += 150;
                 // introduce charging station
@@ -549,27 +549,27 @@ signed main()
                         toBatterySwappingStationCharge = batteryChRequiredForPreviousToNext;
                     }
                 }
-                // double distance_between_swapping;
-                // double mnSwap = 1e7;
-                // int swap_station = -1;
-                // for (int j = 1; j <= mx_battery_swapping_stations; j++)
-                // {
-                //     double dist;
-                //     if (counter == 0)
-                //         dist = distance(locations[temp].first, locations[temp].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
-                //     else
-                //         dist = distance(battery_swap_stations[(nodeTraversor[i].back() / (1e7))].first, battery_swap_stations[(nodeTraversor[i].back() / (1e7))].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
-                //     double distance_between_swapping = distance(locations[end_node].first, locations[end_node].second, battery_swap_stations[j].first, battery_swap_stations[j].second);
 
-                //     // cout << "j is " << j << " dist is " << dist << "distance between/ charging" << distanceBetweenCharging << "distance between nodes" << distanceBetweenNodes
-                //     if (distance_between_swapping < distance_between_swapping_nodes)
-                //     {
-                //         mnSwap = min(mnSwap, dist);
-                //         swap_station = j;
-                //     }
-                // }
-                // double mnCharge;
-                // double mnSwap;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 if (chStation == -1 && batterySwappingStation == -1)
                 {
                     cout << "Charging/Battery Swapping station not possible: Exiting";
@@ -594,23 +594,23 @@ signed main()
                     else
                         distanceValue = distance(batteryChargingStations[(nodeTraversor[i].back() / (1e7))].first, batteryChargingStations[(nodeTraversor[i].back() / (1e7))].second, batteryChargingStations[chStation].first, batteryChargingStations[chStation].second);
 
-                    // }
-                    // if(swap_station!=-1)
-                    // {
-                    //     distance_between_swapping_nodes = distance(battery_swap_stations[chStation].first, battery_swap_stations[chStation].second, locations[end_node].first, locations[end_node].second);
-                    //     if (counter == 0)
-                    //         swapping_node_distanceValue = distance(locations[temp].first, locations[temp].second, battery_swap_stations[chStation].first, battery_swap_stations[chStation].second);
-                    //     else
-                    //         swapping_node_distanceValue = distance(battery_swap_stations[(nodeTraversor[i].back() / (1e7))].first, battery_swap_stations[(nodeTraversor[i].back() / (1e7))].second, battery_swap_stations[chStation].first, battery_swap_stations[chStation].second);
-                    // }
+
+
+
+
+
+
+
+
+
 
                     chargeRequirement[i][chStation].push_back(mxBatteryLevels[i] - toChargingStationCharge);
                     nodeTraversor[i].push_back(chStation * 1e7);
                 }
-                // double charging_node_distanceValue;
-                // double swapping_node_distanceValue;
-                // if (chStation != -1)
-                // {
+
+
+
+
 
                 totalTimes[i] += (distanceValue / ((1 + weightFactorForSpeed[i] * weight) * speedOfVehicles[i]));
                 ch_required = (dischargingAdditive + weight * 1.0 / mxWeightAllowed[i]) * (distanceBetweenNodes * (1 + weightFactorForDistance[i] * weight));
@@ -619,9 +619,9 @@ signed main()
 
                 residualBatteryLevel = batteryLevel - 150;
             }
-            // if (end_node == depo and counter!=0)
-            //     break;
-            // counter++;
+
+
+
 
             totalTimes[i] += (distanceValue / ((1 + weightFactorForSpeed[i] * weight) * speedOfVehicles[i]));
 
@@ -636,21 +636,21 @@ signed main()
                 end_node = adjacencyMatrix[i][end_node][1];
             else
                 end_node = adjacencyMatrix[i][end_node][0];
-            // end_node = adjacencyMatrix[i][end_node][node_selected];
 
-            // if (visited[end_node] != 0 or end_node == previous_node)
-            // {
-            //     node_selected ^= 1;
-            //     end_node = adjacencyMatrix[i][temp][node_selected];
-            // }
 
-            // visited[end_node] = 1;
-            // node = end_node == adjacencyMatrix[i][end_node][node_selected] ? adjacencyMatrix[i][end_node][node_selected ^ 1] : adjacencyMatrix[i][end_node][node_selected];
 
-            // int counter = 0;
-            // double distance_between_swapping_nodes = distanceBetweenNodes;
-            // if (end_node == depo)
-            //     break;
+
+
+
+
+
+
+
+
+
+
+
+
 
             distanceBetweenNodes = distance(locations[temp].first, locations[temp].second, locations[end_node].first, locations[end_node].second);
 
@@ -729,7 +729,7 @@ signed main()
             double cost_saved = (top.first) * ((mediumOrSlow == 0 ? costPerUnitChargeOfFast : costPerUnitChargeOfMedium) - (mediumOrSlow == 0 ? costPerUnitChargeOfMedium : costPerUnitChargeOfSlow));
 
             chargingTImes[i] += (top.first) * ((mediumOrSlow == 0 ? mediumChargingTimePerUnitOfCharge : slowChargingTimePerUnitOfCharge) - (mediumOrSlow == 0 ? fastChargingTimePerUnitOfCharge : mediumChargingTimePerUnitOfCharge));
-            // costOfCharging[i] -= total_cost_saved;
+
             chargeStorage.pop();
             if (mappingForStation[i][top.second] == 0)
                 chargeStorage.push({top.first - cost_saved, top.second});
@@ -748,10 +748,10 @@ signed main()
         totalTimes[i] += (chargingTImes[i] + swappingTimes[i]);
         final_ans = max(final_ans, totalTimes[i]);
 
-        // if(totalTimes[i]>10.00)
-        // totalTimes[i]/=(100.00);
+
+
     }
-    // sort(totalTimes.begin(), totalTimes.end(), greater<>());
+
 
     /************* Battery Swapping Not Done *************/
     cout << "Mxvehicles" << mxVehicles << endl;
